@@ -1,8 +1,15 @@
 
-<h3>Detalles del Post: {{ postDetails.id }} </h3>
+<div class="flex justify-content-between">
+    <h4>Detalles del Post: {{ postDetails.id }} </h4>
+    <h4 *ngIf="mostrarFecha">
+        Ultimo comentario: {{ fecha | date: 'yyyy, MMM, dd ' }}
+    </h4>
+</div>
 
 <h1> {{ postDetails.title | titlecase }} </h1>
 
 <p> {{ postDetails.body }} </p>
 
-<app-comentarios [postDetails]="postDetails"></app-comentarios>
+<app-comentarios [postDetails]="postDetails"
+                 (miEvento)="emitir()">
+</app-comentarios>

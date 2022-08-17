@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Comentarios } from '../../interfaces/comentarios.interface';
 import { PostService } from '../../services/post.service';
 import { Post } from '../../interfaces/post.interface';
@@ -17,8 +17,11 @@ import { switchMap } from 'rxjs';
 export class ComentariosComponent implements OnInit {
 
   @Input() postDetails: Post = {};
+  fecha: Date = new Date();
+  comentarios: Comentarios[] = [];
+  mostrarFecha: boolean = false;
 
-  comentarios: Comentarios[] = []
+  @Output() miEvento = new EventEmitter<boolean>();
 
   constructor( private postService: PostService,
                private activatedRoute: ActivatedRoute) { }
@@ -29,15 +32,10 @@ export class ComentariosComponent implements OnInit {
         switchMap( ({id}) => this.postService.getComentarios( id ) )
       )
       .subscribe( resp => this.comentarios = resp )
-
   }
 
-  // coment(id: string){
-  //   this.postService.getComentarios(id)
-  //   .subscribe( resp => {
-  //     this.comentarios = resp
-  //     console.log(resp)
-  //   } )
-  // }
+  emitirFecha() {
+    this.miEvento.emit(this.mostrarFecha)
+  }
 
 }

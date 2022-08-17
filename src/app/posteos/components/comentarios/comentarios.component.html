@@ -1,5 +1,6 @@
 
 <p-panel header="Comentarios">
+    
     <p-panel *ngFor="let comentario of comentarios" 
              header="{{ comentario.email }}"
              [toggleable]="true"
@@ -8,4 +9,13 @@
         <p>{{ comentario.name | titlecase }}</p>
         <p>{{ comentario.body }}</p>
     </p-panel>
+
+    <div class="flex justify-content-center">
+        <button pButton 
+                type="button" 
+                label="Emitir"
+                (click)="emitirFecha()">
+        </button>           
+    </div>
+
 </p-panel>
