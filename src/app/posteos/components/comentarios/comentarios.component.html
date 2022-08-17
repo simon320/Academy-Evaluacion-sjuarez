@@ -1,0 +1,11 @@
+
+<p-panel header="Comentarios">
+    <p-panel *ngFor="let comentario of comentarios" 
+             header="{{ comentario.email }}"
+             [toggleable]="true"
+             [collapsed]="true">
+        
+        <p>{{ comentario.name | titlecase }}</p>
+        <p>{{ comentario.body }}</p>
+    </p-panel>
+</p-panel>

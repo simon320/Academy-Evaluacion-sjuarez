@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {  Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from '../../services/post.service';
 import { Post } from '../../interfaces/post.interface';
@@ -14,6 +14,7 @@ export class DetailsComponent implements OnInit {
 
   postDetails: Post = {}
 
+
   constructor( private activatedRoute: ActivatedRoute,
                private postService: PostService) { }
 
@@ -23,6 +24,7 @@ export class DetailsComponent implements OnInit {
         switchMap( ({id}) => this.postService.getPostPorId( id ) )
       )
       .subscribe( post => this.postDetails = post )
-  }
+    }
+
 
 }
