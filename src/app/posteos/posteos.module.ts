@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { PrimeNgModule } from '../prime-ng/prime-ng.module';
+
 import { HomeComponent } from './pages/home/home.component';
 import { DetailsComponent } from './pages/details/details.component';
+import { AppRoutingModule } from '../app-routing.module';
 
 
 @NgModule({
@@ -10,8 +14,13 @@ import { DetailsComponent } from './pages/details/details.component';
     DetailsComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    PrimeNgModule,
+    AppRoutingModule
   ],
-  exports: []
+  exports: [
+    HomeComponent,
+    DetailsComponent
+  ]
 })
 export class PosteosModule { }
