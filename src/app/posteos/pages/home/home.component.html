@@ -15,7 +15,8 @@
             <td>{{post.id}}</td>
             <td>{{post.title}}</td>
             <td>
-                <a [routerLink]="['/post/', post.id]">
+                <a [routerLink]="['/post/', post.id]"
+                   (click)="verDetalles(post.id)">
                     Ver
                 </a>
             </td>

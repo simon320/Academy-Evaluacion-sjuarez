@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { PostService } from '../../services/post.service';
+import { Post } from '../../interfaces/post.interface';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-details',
@@ -9,13 +12,17 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class DetailsComponent implements OnInit {
 
-  detailId: string = ''
+  postDetails: Post = {}
 
-  constructor( private activatedRoute: ActivatedRoute) { }
+  constructor( private activatedRoute: ActivatedRoute,
+               private postService: PostService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params
-      .subscribe( ({id}) => this.detailId = id)
+      .pipe(
+        switchMap( ({id}) => this.postService.getPostPorId( id ) )
+      )
+      .subscribe( post => this.postDetails = post )
   }
 
 }
