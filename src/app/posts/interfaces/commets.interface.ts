@@ -1,4 +1,4 @@
-export interface Comentarios {
+export interface Commets {
     postId: number;
     id:     number;
     name:   string;

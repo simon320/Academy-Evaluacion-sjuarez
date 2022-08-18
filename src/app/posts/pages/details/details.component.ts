@@ -16,9 +16,9 @@ import { Post } from '../../interfaces/post.interface';
 })
 export class DetailsComponent implements OnInit {
 
+  date: Date = new Date();
   postDetails: Post = {};
-  fecha: Date = new Date();
-  mostrarFecha: boolean = false;
+  showDate: boolean = false;
 
 
   constructor( private activatedRoute: ActivatedRoute,
@@ -28,13 +28,14 @@ export class DetailsComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params
       .pipe(
-        switchMap( ({id}) => this.postService.getPostPorId( id ) )
+        switchMap( ({id}) => this.postService.getPostForId( id ) )
       )
       .subscribe( post => this.postDetails = post );
     }
  
 
-    emitir() {
-        return this.mostrarFecha = !this.mostrarFecha;
+    emitDate() {
+      this.showDate = !this.showDate;
+      return this.showDate;
     }
 }

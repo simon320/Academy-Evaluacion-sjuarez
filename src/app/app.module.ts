@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
-import { PosteosModule } from './posteos/posteos.module';
+import { PostsModule } from './posts/posts.module';
 
 import { AppComponent } from './app.component';
 import { ErrorPageComponent } from './shared/error-page/error-page.component';
@@ -26,7 +26,7 @@ registerLocaleData( localEs );
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    PosteosModule,
+    PostsModule,
     PrimeNgModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'es-AR' }],

@@ -7,11 +7,11 @@
     <p-table [value]="post" responsiveLayout="scroll">
 
         <ng-template pTemplate="header">
-            <tr>
-                <th>ID</th>
-                <th>Post</th>
-                <th>Actions</th>
-            </tr>
+                <tr>
+                    <th id="1">ID</th>
+                    <th id="2">Post</th>
+                    <th id="3">Ver</th>
+                </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-post>
@@ -21,7 +21,7 @@
                 <td>
                     <a 
                         [routerLink]="['/post/', post.id]"
-                        (click)="verDetalles(post.id)">
+                        (click)="showDetails(post.id)">
                         Detalles...
                     </a>
                 </td>

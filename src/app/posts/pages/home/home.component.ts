@@ -24,8 +24,8 @@ export class HomeComponent implements OnInit {
       .subscribe( post => this.post = post );
   }
 
-  verDetalles( id: string) {
-    this.postService.getPostPorId(id)
+  showDetails( id: string) {
+    this.postService.getPostForId(id)
   }
 
 }

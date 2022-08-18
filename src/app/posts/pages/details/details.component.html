@@ -1,0 +1,22 @@
+<div class="flex-column p-3">
+
+    <a routerLink="/"><em class="pi pi-arrow-left"></em></a>
+
+    <div class="flex justify-content-between">
+        <h4 class="ml-2">Detalles del Post: {{ postDetails.id }} </h4>
+
+        <h4 *ngIf="showDate" class="mr-2">
+            Ultimo comentario: {{ date | date: 'yyyy, MMM, dd ' }}
+        </h4>
+    </div>
+    
+    <h1> {{ postDetails.title | titlecase }} </h1>
+    
+    <h4> {{ postDetails.body }} </h4>
+    
+    <app-commets [postDetails]="postDetails"
+        (dateEvent)="emitDate()">
+    </app-commets>
+
+</div>
+
