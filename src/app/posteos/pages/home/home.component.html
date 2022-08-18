@@ -1,25 +1,33 @@
 
-<h1>List Post</h1>
+<div class="flex-column align-items-center m-3">
 
+    <h1 class="text-center">Lista de Posts</h1>
+    
+    
+    <p-table [value]="post" responsiveLayout="scroll">
 
-<p-table [value]="post" responsiveLayout="scroll">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>ID</th>
-            <th>Post</th>
-            <th>Actions</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-post>
-        <tr>
-            <td>{{post.id}}</td>
-            <td>{{post.title}}</td>
-            <td>
-                <a [routerLink]="['/post/', post.id]"
-                   (click)="verDetalles(post.id)">
-                    Ver
-                </a>
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Post</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-post>
+            <tr>
+                <td>{{post.id}}</td>
+                <td>{{post.title}}</td>
+                <td>
+                    <a 
+                        [routerLink]="['/post/', post.id]"
+                        (click)="verDetalles(post.id)">
+                        Detalles...
+                    </a>
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+</div>

@@ -11,6 +11,7 @@ import { ErrorPageComponent } from './shared/error-page/error-page.component';
 
 import localEs from '@angular/common/locales/es-AR';
 import { registerLocaleData } from '@angular/common';
+import { PrimeNgModule } from './prime-ng/prime-ng.module';
 
 registerLocaleData( localEs );
 
@@ -25,7 +26,8 @@ registerLocaleData( localEs );
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    PosteosModule
+    PosteosModule,
+    PrimeNgModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'es-AR' }],
   bootstrap: [AppComponent]

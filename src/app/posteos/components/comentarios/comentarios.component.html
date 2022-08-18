@@ -6,28 +6,31 @@
             pButton 
             type="button" 
             [label]="labelButton"
-
-            (click)="toggleCase()">
+            (click)="toggleCase()"
+            [ngClass]="{
+                'p-button-secondary': validationToggle === true,
+                'p-button-info': validationToggle !== true
+            }">
         </button> 
     </div>
 
-    <p-panel *ngFor="let comentario of comentarios" 
-             header="{{ comentario.name | alternCase:validationToggle }}"
-             [toggleable]="true"
-             [collapsed]="true">
+    <p-panel 
+        *ngFor="let comentario of comentarios" 
+        header="{{ comentario.name | alternCase:validationToggle }}"
+        [toggleable]="true"
+        [collapsed]="true">
 
-
-
-            <p>{{ comentario.body }}</p>
-            <p class="flex justify-content-end pr-5">{{ comentario.email | titlecase }}</p>
-
+        <p>{{ comentario.body }}</p>
+        <p class="flex justify-content-end pr-5">{{ comentario.email | titlecase }}</p>
     </p-panel>
 
     <div class="flex justify-content-center">
-        <button pButton 
-                type="button" 
-                label="Emitir"
-                (click)="emitirFecha()">
+        <button 
+            pButton 
+            type="button" 
+            label="Emitir Fecha"
+            class="p-button-info"
+            (click)="emitirFecha()">
         </button>           
     </div>
 

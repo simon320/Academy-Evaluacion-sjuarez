@@ -6,8 +6,12 @@ import { PostService } from '../../services/post.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styles: [
-  ]
+  styles: [`
+    a {
+      text-decoration: none;
+      color: #acf;
+    }
+  `]
 })
 export class HomeComponent implements OnInit {
 
