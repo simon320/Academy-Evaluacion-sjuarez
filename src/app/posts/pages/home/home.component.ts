@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.postService.getPost()
-      .subscribe( post => this.post = post );
+      .subscribe( post => this.post = post.slice(0, 10) );
   }
 
   showDetails( id: string) {
