@@ -1,14 +1,19 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { AppComponent } from './app.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { PosteosModule } from './posteos/posteos.module';
 
+import { AppComponent } from './app.component';
 import { ErrorPageComponent } from './shared/error-page/error-page.component';
+
+import localEs from '@angular/common/locales/es-AR';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData( localEs );
+
 
 @NgModule({
   declarations: [
@@ -22,7 +27,7 @@ import { ErrorPageComponent } from './shared/error-page/error-page.component';
     HttpClientModule,
     PosteosModule
   ],
-  providers: [],
+  providers: [{ provide: LOCALE_ID, useValue: 'es-AR' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

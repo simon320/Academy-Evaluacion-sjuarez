@@ -20,6 +20,9 @@ export class ComentariosComponent implements OnInit {
   fecha: Date = new Date();
   comentarios: Comentarios[] = [];
   mostrarFecha: boolean = false;
+  validationToggle: boolean = false;
+
+  labelButton: string = "Cambiar a Mayuscula";
 
   @Output() miEvento = new EventEmitter<boolean>();
 
@@ -36,6 +39,15 @@ export class ComentariosComponent implements OnInit {
 
   emitirFecha() {
     this.miEvento.emit(this.mostrarFecha)
+  }
+
+  toggleCase() {
+    this.validationToggle = !this.validationToggle;
+    if (this.labelButton === "Cambiar a Mayuscula" ){
+      this.labelButton = "Cambiar a Minuscula";
+    } else {
+      this.labelButton = "Cambiar a Mayuscula"
+    }
   }
 
 }

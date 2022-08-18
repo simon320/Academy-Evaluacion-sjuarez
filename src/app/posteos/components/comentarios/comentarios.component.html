@@ -1,13 +1,26 @@
 
 <p-panel header="Comentarios">
     
+    <div class="flex justify-content-end">
+        <button 
+            pButton 
+            type="button" 
+            [label]="labelButton"
+
+            (click)="toggleCase()">
+        </button> 
+    </div>
+
     <p-panel *ngFor="let comentario of comentarios" 
-             header="{{ comentario.email }}"
+             header="{{ comentario.name | alternCase:validationToggle }}"
              [toggleable]="true"
              [collapsed]="true">
-        
-        <p>{{ comentario.name | titlecase }}</p>
-        <p>{{ comentario.body }}</p>
+
+
+
+            <p>{{ comentario.body }}</p>
+            <p class="flex justify-content-end pr-5">{{ comentario.email | titlecase }}</p>
+
     </p-panel>
 
     <div class="flex justify-content-center">

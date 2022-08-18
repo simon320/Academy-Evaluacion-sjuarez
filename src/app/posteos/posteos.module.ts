@@ -7,13 +7,15 @@ import { HomeComponent } from './pages/home/home.component';
 import { DetailsComponent } from './pages/details/details.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { ComentariosComponent } from './components/comentarios/comentarios.component';
+import { AlternCasePipe } from './pipes/altern-case.pipe';
 
 
 @NgModule({
   declarations: [
     HomeComponent,
     DetailsComponent,
-    ComentariosComponent
+    ComentariosComponent,
+    AlternCasePipe
   ],
   imports: [
     CommonModule,
