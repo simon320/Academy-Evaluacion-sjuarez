@@ -17,8 +17,8 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'post/:id',
-    component: DetailsComponent
+    path: '',
+    loadChildren: () => import('./posts/posts.module').then( m => m.PostsModule)
   },
   {
     path: '404',

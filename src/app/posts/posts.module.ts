@@ -5,9 +5,9 @@ import { PrimeNgModule } from '../prime-ng/prime-ng.module';
 
 import { HomeComponent } from './pages/home/home.component';
 import { DetailsComponent } from './pages/details/details.component';
-import { AppRoutingModule } from '../app-routing.module';
 import { AlternCasePipe } from './pipes/altern-case.pipe';
 import { CommetsComponent } from './components/comments/commets.component';
+import { PostRoutingModule } from './post-routing.module';
 
 
 @NgModule({
@@ -20,7 +20,7 @@ import { CommetsComponent } from './components/comments/commets.component';
   imports: [
     CommonModule,
     PrimeNgModule,
-    AppRoutingModule
+    PostRoutingModule
   ],
   exports: [
     HomeComponent,
