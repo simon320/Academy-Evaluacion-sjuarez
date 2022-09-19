@@ -9,8 +9,12 @@ import { HomeComponent } from './posts/pages/home/home.component';
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    redirectTo: 'post',
     pathMatch: 'full'
+  },
+  {
+    path: 'post',
+    component: HomeComponent,
   },
   {
     path: 'post/:id',

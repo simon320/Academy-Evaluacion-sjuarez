@@ -36,6 +36,5 @@ export class DetailsComponent implements OnInit {
 
     emitDate() {
       this.showDate = !this.showDate;
-      return this.showDate;
     }
 }
