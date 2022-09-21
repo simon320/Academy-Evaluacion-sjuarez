@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Post } from '../interfaces/post.interface';
-import { Commets } from '../interfaces/commets.interface';
+import { Comments } from '../interfaces/comments.interface';
 
 
 @Injectable({
@@ -24,6 +24,6 @@ export class PostService {
   }
 
   getCommets( id: string ) {
-    return this.http.get<Commets[]>( `${ this.baseUrl }/comments?postId=${ id }` );
+    return this.http.get<Comments[]>( `${ this.baseUrl }/comments?postId=${ id }` );
   }
 }

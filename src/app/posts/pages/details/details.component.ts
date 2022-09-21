@@ -17,8 +17,13 @@ import { Post } from '../../interfaces/post.interface';
 export class DetailsComponent implements OnInit {
 
   date: Date = new Date();
-  postDetails: Post = {};
   showDate: boolean = false;
+  postDetails: Post = {
+    id: 0,
+    userId: 0,
+    title: "",
+    body: ""
+  }
 
 
   constructor( private activatedRoute: ActivatedRoute,

@@ -15,13 +15,13 @@
     </div>
 
     <p-panel 
-        *ngFor="let commet of commets" 
-        header="{{ commet.name | alternCase:validationToggle }}"
+        *ngFor="let comment of comments" 
+        header="{{ comment.name | alternCase:validationToggle }}"
         [toggleable]="true"
         [collapsed]="true">
 
-        <p>{{ commet.body }}</p>
-        <p class="flex justify-content-end pr-5">{{ commet.email | titlecase }}</p>
+        <p>{{ comment.body }}</p>
+        <p class="flex justify-content-end pr-5">{{ comment.email | titlecase }}</p>
     </p-panel>
 
     <div class="flex justify-content-center">

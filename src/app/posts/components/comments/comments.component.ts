@@ -2,25 +2,25 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { switchMap } from 'rxjs';
 
-import { Commets } from '../../interfaces/commets.interface';
+import { Comments } from '../../interfaces/comments.interface';
 import { PostService } from '../../services/post.service';
 import { Post } from '../../interfaces/post.interface';
 
 @Component({
-  selector: 'app-commets',
-  templateUrl: './commets.component.html',
+  selector: 'app-comments',
+  templateUrl: './comments.component.html',
   styles: [`
     p-panel{
       margin: 2rem;
     }
   `]
 })
-export class CommetsComponent implements OnInit {
+export class CommentsComponent implements OnInit {
 
-  @Input() postDetails: Post = {};
+  @Input() postDetails!: Post;
 
   date: Date = new Date();
-  commets: Commets[] = [];
+  comments: Comments[] = [];
   showDate: boolean = false;
   validationToggle: boolean = false;
   labelButton: string = "Cambiar a Mayuscula";
@@ -35,7 +35,7 @@ export class CommetsComponent implements OnInit {
       .pipe(
         switchMap( ({id}) => this.postService.getCommets( id ) )
       )
-      .subscribe( resp => this.commets = resp )
+      .subscribe( resp => this.comments = resp )
   }
 
   emitDate() {
