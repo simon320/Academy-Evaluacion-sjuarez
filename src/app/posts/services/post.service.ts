@@ -23,7 +23,7 @@ export class PostService {
     return this.http.get<Post>(`${ this.baseUrl }/posts/${ id }`);
   }
 
-  getCommets( id: string ) {
+  getCommets( id: string ): Observable<Comments[]> {
     return this.http.get<Comments[]>( `${ this.baseUrl }/comments?postId=${ id }` );
   }
 }

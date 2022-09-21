@@ -20,11 +20,15 @@ export class HomeComponent implements OnInit {
   constructor( private postService: PostService) { }
 
   ngOnInit(): void {
-    this.postService.getPost()
-      .subscribe( post => this.post = post.slice(0, 10) );
+    this.getAllPost();
   }
 
-  showDetails( id: string) {
+  getAllPost(): void {
+    this.postService.getPost()
+    .subscribe( post => this.post = post.slice(0, 10) );
+  }
+
+  showDetails( id: string): void {
     this.postService.getPostForId(id)
   }
 

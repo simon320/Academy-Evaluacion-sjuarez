@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
 
 import { PostService } from '../../services/post.service';
@@ -26,20 +26,30 @@ export class DetailsComponent implements OnInit {
   }
 
 
-  constructor( private activatedRoute: ActivatedRoute,
-               private postService: PostService) { };
+  constructor( 
+    private activatedRoute: ActivatedRoute,
+    private postService: PostService,
+    private router: Router
+  ) { };
 
 
   ngOnInit(): void {
+    this.getPostById();
+  }
+
+  getPostById(): void {
     this.activatedRoute.params
-      .pipe(
-        switchMap( ({id}) => this.postService.getPostForId( id ) )
-      )
-      .subscribe( post => this.postDetails = post );
-    }
+    .pipe(
+      switchMap( ({id}) => this.postService.getPostForId( id ) )
+    )
+    .subscribe({
+      next: post => this.postDetails = post,
+      error: _ => this.router.navigate(['error'])
+    });
+  }
  
 
-    emitDate() {
-      this.showDate = !this.showDate;
-    }
+  emitDate(): void {
+    this.showDate = !this.showDate;
+  }
 }
