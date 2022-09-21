@@ -5,7 +5,7 @@
     <div class="flex justify-content-between">
         <h4 class="ml-2">Detalles del Post: {{ postDetails.id }} </h4>
 
-        <h4 *ngIf="showDate" class="mr-2">
+        <h4 *ngIf="commentsDate" class="mr-2">
             Ultimo comentario: {{ date | date: 'yyyy, MMM, dd ' }}
         </h4>
     </div>
@@ -15,7 +15,7 @@
     <h4> {{ postDetails.body }} </h4>
     
     <app-comments [postDetails]="postDetails"
-        (dateEvent)="emitDate()">
+        (dateEvent)="showDate($event)">
     </app-comments>
 
 </div>

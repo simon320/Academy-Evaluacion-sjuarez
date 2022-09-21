@@ -16,8 +16,8 @@ import { Post } from '../../interfaces/post.interface';
 })
 export class DetailsComponent implements OnInit {
 
-  date: Date = new Date();
-  showDate: boolean = false;
+  date!: Date;
+  commentsDate: boolean = false;
   postDetails: Post = {
     id: 0,
     userId: 0,
@@ -48,8 +48,8 @@ export class DetailsComponent implements OnInit {
     });
   }
  
-
-  emitDate(): void {
-    this.showDate = !this.showDate;
+  showDate( date: Date): void {
+    this.date = date;
+    this.commentsDate = !this.commentsDate;
   }
 }

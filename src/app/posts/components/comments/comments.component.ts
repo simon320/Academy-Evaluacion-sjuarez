@@ -21,28 +21,36 @@ export class CommentsComponent implements OnInit {
 
   date: Date = new Date();
   comments: Comments[] = [];
-  showDate: boolean = false;
   validationToggle: boolean = false;
   labelButton: string = "Cambiar a Mayuscula";
 
-  @Output() dateEvent = new EventEmitter<boolean>();
+  @Output() dateEvent: EventEmitter<Date> = new EventEmitter();
 
-  constructor( private postService: PostService,
-               private activatedRoute: ActivatedRoute) { }
+  constructor( 
+    private postService: PostService,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    this.getComments();
+  }
+
+  getComments(): void {
     this.activatedRoute.params
-      .pipe(
-        switchMap( ({id}) => this.postService.getCommets( id ) )
-      )
-      .subscribe( resp => this.comments = resp )
+    .pipe(
+      switchMap( ({id}) => this.postService.getCommets( id ) )
+    )
+    .subscribe({
+      next: comment => this.comments = comment,
+      error: err => console.log(err)
+    });
   }
 
-  emitDate() {
-    this.dateEvent.emit(this.showDate)
+  emitDate(): void {
+    this.dateEvent.emit(this.date)
   }
 
-  toggleCase() {
+  toggleCase(): void {
     this.validationToggle = !this.validationToggle;
     if (this.labelButton === "Cambiar a Mayuscula" ){
       this.labelButton = "Cambiar a Minuscula";

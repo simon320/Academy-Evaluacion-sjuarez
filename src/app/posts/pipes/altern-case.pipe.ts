@@ -5,8 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class AlternCasePipe implements PipeTransform {
 
-  transform(value: string, enMayusculas: boolean = false): string {
-    return (enMayusculas) ? value.toUpperCase() : value.toLowerCase(); 
+  transform(value: string, isUppercase: boolean = false): string {
+    return (isUppercase) ? value.toUpperCase() : value.toLowerCase(); 
   }
 
 }
