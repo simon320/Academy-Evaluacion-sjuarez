@@ -3,8 +3,8 @@
 
     <h1 class="text-center">Lista de Posts</h1>
     
-    
-    <p-table [value]="post" responsiveLayout="scroll">
+    <p-table [value]="post" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" [responsive]="true"
+    currentPageReportTemplate="{first} a {last} de {totalRecords} post" [rowsPerPageOptions]="[10,25,50]">
 
         <ng-template pTemplate="header">
                 <tr>
@@ -26,6 +26,12 @@
                     </a>
                 </td>
             </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" styleClass="p-button-text"></p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <p-button type="button" styleClass="p-button-text"></p-button>
         </ng-template>
 
     </p-table>

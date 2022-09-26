@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
 
   getAllPost(): void {
     this.postService.getPost()
-    .subscribe( post => this.post = post.slice(0, 10) );
+    .subscribe( post => this.post = post );
   }
 
   showDetails( id: string): void {
