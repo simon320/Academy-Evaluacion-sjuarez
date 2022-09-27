@@ -1,23 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DetailsComponent } from './posts/pages/details/details.component';
 import { ErrorPageComponent } from './shared/error-page/error-page.component';
-import { HomeComponent } from './posts/pages/home/home.component';
-
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'post',
+    redirectTo: 'auth/login',
     pathMatch: 'full'
   },
   {
-    path: 'post',
-    component: HomeComponent,
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule )
   },
   {
-    path: '',
+    path: 'post',
     loadChildren: () => import('./posts/posts.module').then( m => m.PostsModule)
   },
   {

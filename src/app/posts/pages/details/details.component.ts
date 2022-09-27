@@ -25,7 +25,6 @@ export class DetailsComponent implements OnInit {
     body: ""
   }
 
-
   constructor( 
     private activatedRoute: ActivatedRoute,
     private postService: PostService,
@@ -47,7 +46,7 @@ export class DetailsComponent implements OnInit {
       error: _ => this.router.navigate(['error'])
     });
   }
- 
+
   showDate( date: Date): void {
     this.date = date;
     this.commentsDate = !this.commentsDate;

@@ -1,0 +1,70 @@
+<div class="flex flex-column justify-content-center h-screen">
+
+    <form (ngSubmit)="login()" [formGroup]="registerForm" autocomplete="off">
+
+        <!-- Email -->
+        <div class="col-12 md:col-4 m-auto">
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><em class="pi pi-envelope"></em></span>
+                <input 
+                    pInputText 
+                    type="text" 
+                    placeholder="Email"
+                    formControlName="email">
+            </div>
+            <div class="h-1rem">
+                <small 
+                    *ngIf="inputInvalid('email')"
+                    class="block text-center text-red-500 m-0"> 
+                    Este mail no se encuentra registrado.
+                </small>
+            </div>     
+        </div>
+
+        <!-- Contraseña -->
+        <div class="col-12 md:col-4 m-auto">
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><em class="pi pi-lock"></em></span>
+                <input 
+                    pInputText
+                    type="password" 
+                    placeholder="Contraseña"
+                    formControlName="password">
+            </div>
+            <div class="h-1rem">
+                <small 
+                    *ngIf="notPass"
+                    class="block text-center text-red-500 m-0"> 
+                    El password es incorrecto.
+                </small>
+            </div>
+        </div>
+
+        <!-- Boton submit -->
+        <div class="col-12 md:col-4 m-auto max-w-full">
+            <div class="p-inputgroup flex align-items-center justify-content-center">
+                <button *ngIf="emailReady; else loginBtn"
+                    pButton
+                    type="button" 
+                    label="Siguiente"
+                    (click)="getUser()"
+                    class="p-button-info"></button>
+                <ng-template #loginBtn>
+                    <button
+                        pButton
+                        type="submit" 
+                        label="Ingresar"
+                        class="p-button-info"></button>
+                </ng-template>
+            </div>
+        </div>
+
+        <!-- Ruta -->
+        <div class="col-12 md:col-4 m-auto max-w-full">
+            <div class="p-inputgroup flex align-items-center justify-content-center">
+                <h4>¿No tenes una cuenta? <a routerLink="/auth/register">Crear</a></h4>
+            </div>
+        </div>
+
+    </form>
+</div>

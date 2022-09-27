@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Post } from '../interfaces/post.interface';
 import { Comments } from '../interfaces/comments.interface';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -11,7 +12,7 @@ import { Comments } from '../interfaces/comments.interface';
 })
 export class PostService {
 
-  private baseUrl: string = 'https://jsonplaceholder.typicode.com';
+  private baseUrl: string = environment.baseUrl;
 
   constructor( private http: HttpClient ) { }
 
