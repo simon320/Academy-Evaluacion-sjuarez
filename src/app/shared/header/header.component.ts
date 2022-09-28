@@ -171,8 +171,8 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     if ( confirm('¿Desea cerrar la sesion?') ){
-      this.router.navigate(['/auth/login']);
       localStorage.removeItem('currentUser');
+      this.router.navigate(['/auth/login']);
     } else {
       return;
     }
