@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../environments/environment';
 import { User } from '../../posts/interfaces/user.interface';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +22,16 @@ export class UserService {
     return this.http.get<User[]>( `${ this.baseUrl }/users?q=${ email }`);
   }
 
-  getUserById( user: any ): Observable<User> {
+  getUserById( user: User ): Observable<User> {
     return this.http.put<User>( `${ this.baseUrl }/users/${ user.id }`, user);
+  }
+
+  authentication(): Observable<boolean> {
+    if( !localStorage.getItem('currentUser') ) {
+      return of(false);
+    } else {
+      return of(true);
+    }
   }
 
 }
