@@ -20,10 +20,7 @@ export class HeaderComponent implements OnInit {
   editForm: FormGroup = this.fb.group({
     username: ['', [ Validators.required, Validators.minLength(4), Validators.pattern( this.vs.notEmpty ) ]],
     email: ['', [ Validators.required, Validators.pattern( this.vs.emailPattern )] ],
-    password: ['', [ Validators.required, Validators.minLength(6), Validators.pattern( this.vs.notEmpty ) ]],
-    password2: ['', [ Validators.required ]]
-  }, {
-    validators: [ this.vs.compareFields('password', 'password2') ]
+    password: ['', [ Validators.required, Validators.minLength(6), Validators.pattern( this.vs.notEmpty ) ]]
   })
 
   get userErrorMsg(): string {
@@ -102,10 +99,14 @@ export class HeaderComponent implements OnInit {
 
   showEditUser(): void {
     this.modalEdit = true;
+    this.editForm.markAllAsTouched();
   }
 
   saveChanges() {
-    if ( this.editForm.invalid ) return;
+    if ( this.editForm.invalid ) {
+      return;
+    }
+
     const { id } = this.currentUser;
     const userEdit: User = {
       id,
@@ -131,7 +132,7 @@ export class HeaderComponent implements OnInit {
           bs: ""
       }
     }
-    
+  
     this.userService.getUserById( userEdit )
       .subscribe({
         next: _ => {
@@ -150,6 +151,7 @@ export class HeaderComponent implements OnInit {
           }, 1500);
         }
       })
+    
   }
 
   close(): void {
