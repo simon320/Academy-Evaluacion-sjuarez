@@ -21,5 +21,9 @@ export class UserService {
   getUserLogin( email: string ): Observable<User[]> {
     return this.http.get<User[]>( `${ this.baseUrl }/users?q=${ email }`);
   }
-  
+
+  getUserById( user: any ): Observable<User> {
+    return this.http.put<User>( `${ this.baseUrl }/users/${ user.id }`, user);
+  }
+
 }

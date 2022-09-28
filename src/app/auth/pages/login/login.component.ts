@@ -56,7 +56,7 @@ export class LoginComponent {
     const { password } = this.registerForm.value
 
     if ( this.currentUser[0].password === password ){
-      localStorage.setItem('currentUser', JSON.stringify( this.currentUser ))
+      localStorage.setItem('currentUser', JSON.stringify( this.currentUser[0] ))
       this.router.navigate(['/post'])
     } else { this.notPass = true }
   }

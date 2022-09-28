@@ -12,6 +12,8 @@ import { ErrorPageComponent } from './shared/error-page/error-page.component';
 import localEs from '@angular/common/locales/es-AR';
 import { registerLocaleData } from '@angular/common';
 import { PrimeNgModule } from './prime-ng/prime-ng.module';
+import { HeaderComponent } from './shared/header/header.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 registerLocaleData( localEs );
 
@@ -19,7 +21,8 @@ registerLocaleData( localEs );
 @NgModule({
   declarations: [
     AppComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +30,8 @@ registerLocaleData( localEs );
     BrowserAnimationsModule,
     HttpClientModule,
     PostsModule,
-    PrimeNgModule
+    PrimeNgModule,
+    ReactiveFormsModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'es-AR' }],
   bootstrap: [AppComponent]

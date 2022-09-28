@@ -7,8 +7,11 @@ import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
 import { TableModule } from 'primeng/table';
 
-import {MessageModule} from 'primeng/message';
-import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import { MessageModule } from 'primeng/message';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
+import { MenubarModule } from 'primeng/menubar';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
 
 
 
@@ -20,8 +23,11 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
     PanelModule,
     PasswordModule,
     TableModule,
+
     MessageModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    MenubarModule,
+    DynamicDialogModule
   ]
 })
 export class PrimeNgModule { }
