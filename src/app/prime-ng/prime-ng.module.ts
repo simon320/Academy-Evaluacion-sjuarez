@@ -3,31 +3,27 @@ import { NgModule } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MenubarModule } from 'primeng/menubar';
+import { MessageModule } from 'primeng/message';
 import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
-import { TableModule } from 'primeng/table';
-
-import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
-import { MenubarModule } from 'primeng/menubar';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
-
+import { TableModule } from 'primeng/table';
 
 
 @NgModule({
   exports: [
     ButtonModule,
     CardModule,
+    InputTextareaModule,
     InputTextModule,
+    MenubarModule,
+    MessageModule,
     PanelModule,
     PasswordModule,
-    TableModule,
-
-    MessageModule,
     ProgressSpinnerModule,
-    MenubarModule,
-    DynamicDialogModule
+    TableModule
   ]
 })
 export class PrimeNgModule { }

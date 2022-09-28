@@ -28,7 +28,6 @@ export class HeaderComponent implements OnInit {
 
   get userErrorMsg(): string {
     const errors = this.editForm.get('username')?.errors;
-    console.log(errors)
     if( errors?.['required'] ) {
       return 'El nombre de usuario es obligatorio.'
     } else if( errors?.['minlength'] ) {
@@ -53,7 +52,6 @@ export class HeaderComponent implements OnInit {
 
   get passErrorMsg(): string {
     const errors = this.editForm.get('password')?.errors;
-    console.log(errors)
     if( errors?.['required'] ) {
       return 'La contraseña es obligatoria.'
     } else if( errors?.['minlength'] ) {
@@ -139,7 +137,6 @@ export class HeaderComponent implements OnInit {
         next: _ => {
           this.success = true;
           this.setCurrentUser( userEdit )
-          console.log(userEdit)
           setTimeout(()=> {
             this.getCurrentUser();
             this.modalEdit = false;

@@ -28,7 +28,6 @@ export class RegisterComponent {
 
   get userErrorMsg(): string {
     const errors = this.registerForm.get('username')?.errors;
-    console.log(errors)
     if( errors?.['required'] ) {
       return 'El nombre de usuario es obligatorio.'
     } else if( errors?.['minlength'] ) {
@@ -53,7 +52,6 @@ export class RegisterComponent {
 
   get passErrorMsg(): string {
     const errors = this.registerForm.get('password')?.errors;
-    console.log(errors)
     if( errors?.['required'] ) {
       return 'La contraseña es obligatoria.'
     } else if( errors?.['minlength'] ) {

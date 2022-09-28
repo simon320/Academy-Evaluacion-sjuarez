@@ -27,4 +27,9 @@ export class PostService {
   getCommets( id: string ): Observable<Comments[]> {
     return this.http.get<Comments[]>( `${ this.baseUrl }/comments?postId=${ id }` );
   }
+
+  addCommets( comment: Comments ): Observable<Comments> {
+    return this.http.post<Comments>( `${ this.baseUrl }/comments?postId=${ comment.id }`, comment );
+  }
+
 }

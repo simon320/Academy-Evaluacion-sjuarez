@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 
 @Injectable({
@@ -27,6 +27,24 @@ export class ValidatorService {
         }
         return null
       }
+  }
+
+  empty( input: string ){
+    return ( form: AbstractControl): ValidationErrors | null => {
+
+      const text = form.get(input)?.value;
+
+      if ( text ) {
+
+        if ( text.trim().length === 0 ) {
+          form.get(input)?.setErrors({ empty: true });
+          return { empty: true }
+        }
+        
+      }
+
+      return null
+    }
   }
 
 }

@@ -8,6 +8,7 @@ import { AlternCasePipe } from './pipes/altern-case.pipe';
 import { CommentsComponent } from './components/comments/comments.component';
 import { DetailsComponent } from './pages/details/details.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { HomeComponent } from './pages/home/home.component';
   imports: [
     CommonModule,
     PrimeNgModule,
-    PostRoutingModule
+    PostRoutingModule,
+    ReactiveFormsModule
   ]
 })
 export class PostsModule { }

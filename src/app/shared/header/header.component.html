@@ -10,10 +10,10 @@
 
 <section *ngIf="modalEdit" class="container-form">
 
-        <form (ngSubmit)="saveChanges()" class="form relative" [formGroup]="editForm"  autocomplete="off">
+        <form (ngSubmit)="saveChanges()" class="form relative p-6" [formGroup]="editForm"  autocomplete="off">
             <button pButton (click)="close()" class="p-button-outlined mr-2 mt-2 absolute top-0 right-0" icon="pi pi-times"></button>
             <!-- Nombre -->
-            <div class="col-12 md:col-4 m-auto field">
+            <div class="col-12 md:col-8 m-auto field">
                 <label class="block">Nombre de Usuario</label>
                 <div class="p-inputgroup flex relative">
                     <span class="p-inputgroup-addon"><em class="pi pi-user"></em></span>
@@ -37,7 +37,7 @@
             </div>
     
             <!-- Email -->
-            <div class="col-12 md:col-4 m-auto field">
+            <div class="col-12 md:col-8 m-auto field">
                 <label class="block">Email</label>
                 <div class="p-inputgroup flex relative">
                     <span class="p-inputgroup-addon"><em class="pi pi-envelope"></em></span>
@@ -63,7 +63,7 @@
             </div>
     
             <!-- Contraseña -->
-            <div class="col-12 md:col-4 m-auto field">
+            <div class="col-12 md:col-8 m-auto field">
                 <label class="block">Contraseña</label>
                 <div class="p-inputgroup flex relative">
                     <span class="p-inputgroup-addon"><em class="pi pi-lock"></em></span>
@@ -89,7 +89,7 @@
     
     
             <!-- Boton -->
-            <div class="col-12 md:col-4 m-auto max-w-full">
+            <div class="col-12 md:col-8 m-auto max-w-full">
                 <div class="p-inputgroup flex align-items-center justify-content-center">
                     <button 
                         pButton 

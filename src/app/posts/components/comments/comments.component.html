@@ -9,7 +9,7 @@
             (click)="toggleCase()"
             [ngClass]="{
                 'p-button-secondary': validationToggle === true,
-                'p-button-info': validationToggle !== true
+                'p-button-primary': validationToggle !== true
             }">
         </button> 
     </div>
@@ -24,14 +24,47 @@
         <p class="flex justify-content-end pr-5">{{ comment.email | titlecase }}</p>
     </p-panel>
 
-    <div class="flex justify-content-center">
-        <button 
-            pButton 
-            type="button" 
-            label="Emitir Fecha"
-            class="p-button-info"
-            (click)="emitDate()">
-        </button>           
-    </div>
+    <section class="scalein fadein">
+        <form (ngSubmit)="saveComment()" [formGroup]="commentForm">
 
+            <!-- Titulo del comentario -->
+            <div class="col-12 md:col-6 m-auto field">
+                <div class="p-inputgroup flex relative">
+                    <input
+                        pInputText 
+                        type="text" 
+                        placeholder="Titulo del comentario"
+                        formControlName="name"> 
+                </div>
+                <div class="h-1rem">
+                    <small *ngIf="inputInvalid('name')" class="text-center p-error block">
+                        {{ nameErrorMsg }}
+                    </small>        
+                </div>    
+            </div>
+
+            <!-- Cuerpo del comentario -->
+            <div class="col-12 md:col-6 m-auto field">
+                <div class="p-inputgroup flex relative">
+                    <textarea formControlName="body" [rows]="5" [cols]="30" pInputTextarea [autoResize]="true" placeholder="Deja aqui tu comentario..."></textarea>
+                </div>
+                <div class="h-1rem">
+                    <small *ngIf="inputInvalid('body')" class="text-center p-error block">
+                        {{ bodyErrorMsg }}
+                    </small>        
+                </div>    
+            </div>
+
+            <!-- Boton submit -->
+            <div class="flex justify-content-center">
+                <button 
+                    pButton 
+                    type="submit" 
+                    label="Agregar comentario"
+                    class="ml-5">
+                </button>                     
+            </div>
+
+        </form>
+    </section>
 </p-panel>
