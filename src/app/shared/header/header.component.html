@@ -10,7 +10,8 @@
 
 <section *ngIf="modalEdit" class="container-form">
 
-        <form (ngSubmit)="saveChanges()" class="form relative p-6" [formGroup]="editForm"  autocomplete="off">
+    <form (ngSubmit)="saveChanges()" class="form relative p-6" [formGroup]="editForm"  autocomplete="off">
+            <h2 class="text-center">Editar datos</h2>
             <button pButton (click)="close()" class="p-button-outlined mr-2 mt-2 absolute top-0 right-0" icon="pi pi-times"></button>
             <!-- Nombre -->
             <div class="col-12 md:col-8 m-auto field">

@@ -1,4 +1,6 @@
 <div class="flex flex-column justify-content-center h-screen">
+    
+    <h1 class="text-center">Registrarse</h1>
 
     <form (ngSubmit)="createRegister()" [formGroup]="registerForm" autocomplete="off">
 
@@ -105,8 +107,7 @@
                     pButton 
                     [disabled]="registerForm.pending" 
                     type="submit" 
-                    label="Crear" 
-                    class="p-button-info"></button>
+                    label="Crear usuario"></button>
             </div>
         </div>
 

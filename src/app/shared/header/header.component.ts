@@ -99,7 +99,6 @@ export class HeaderComponent implements OnInit {
 
   showEditUser(): void {
     this.modalEdit = true;
-    this.editForm.markAllAsTouched();
   }
 
   saveChanges() {

@@ -1,5 +1,7 @@
 <div class="flex flex-column justify-content-center h-screen">
 
+    <h1 class="text-center">Ingresar</h1>
+
     <form (ngSubmit)="login()" [formGroup]="registerForm" autocomplete="off">
 
         <!-- Email -->
@@ -46,15 +48,13 @@
                 <button *ngIf="emailReady; else loginBtn"
                     pButton
                     type="button" 
-                    label="Siguiente"
-                    (click)="getUser()"
-                    class="p-button-info"></button>
+                    label="Continuar"
+                    (click)="getUser()"></button>
                 <ng-template #loginBtn>
                     <button
                         pButton
                         type="submit" 
-                        label="Ingresar"
-                        class="p-button-info"></button>
+                        label="Ingresar"></button>
                 </ng-template>
             </div>
         </div>
