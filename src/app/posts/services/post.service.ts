@@ -29,7 +29,15 @@ export class PostService {
   }
 
   addCommets( comment: Comments ): Observable<Comments> {
-    return this.http.post<Comments>( `${ this.baseUrl }/comments?postId=${ comment.id }`, comment );
+    return this.http.post<Comments>( `${ this.baseUrl }/comments?postId=${ comment.postId }`, comment );
+  }
+
+  editCommets( comment: Comments ): Observable<Comments> {
+    return this.http.put<Comments>( `${ this.baseUrl }/comments/${ comment.id }`, comment );
+  }
+
+  deleteCommets( id: number ): Observable<Comments>{
+    return this.http.delete<Comments>( `${ this.baseUrl }/comments/${ id }`);
   }
 
 }

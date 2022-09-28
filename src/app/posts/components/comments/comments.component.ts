@@ -28,6 +28,8 @@ export class CommentsComponent implements OnInit {
   labelButton: string = "Cambiar a Mayuscula";
   currentUser!: User;
   postId!: number;
+  commentId!: number;
+  showBtnEdit: boolean = false;
 
   @Output() dateEvent: EventEmitter<Date> = new EventEmitter();
 
@@ -122,11 +124,59 @@ export class CommentsComponent implements OnInit {
     this.postService.addCommets( newComment )
       .subscribe({
         next: _ => {
-          this.commentForm.reset({}),
-          this.emitDate()
+          this.commentForm.reset({});
+          this.emitDate();
+          this.getComments();
         },
         error: err => console.log(err)
       })
+  }
+
+  openEditComment( id: number, name: string, body: string ): void {
+    this.commentId = id;
+    this.commentForm.reset({
+      name: name,
+      body: body,
+    })
+    this.showBtnEdit = true;
+  }
+
+  editComment(): void {
+    if(this.commentForm.invalid) {
+      this.commentForm.markAllAsTouched();
+      return;
+    }
+
+    const editComment: Comments = {
+      postId: this.postId,
+      id: this.commentId,
+      name: this.commentForm.get('name')?.value,
+      email: this.currentUser.email,
+      body: this.commentForm.get('body')?.value,
+    }
+
+    this.postService.editCommets( editComment )
+      .subscribe({
+        next: _ => {
+          this.commentForm.reset({});
+          this.emitDate();
+          this.getComments();
+        },
+        error: err => console.log(err)
+      })
+  }
+
+  deleteComment( id: number): void {
+    if( !confirm('¿Desea eliminar el comentario?') ){
+      return;
+    }
+      this.postService.deleteCommets( id )
+      .subscribe({
+        next: _ => {
+          this.getComments();
+        },
+        error: err => console.log(err)
+      });
   }
 
 }

@@ -22,6 +22,11 @@
 
         <p>{{ comment.body }}</p>
         <p class="flex justify-content-end pr-5">{{ comment.email | titlecase }}</p>
+        <div *ngIf="comment.email === currentUser.email" class="flex justify-content-end pr-5">
+            <button (click)="openEditComment(comment.id!, comment.name, comment.body)" pButton pRipple type="button" label="Editar" icon="pi pi-pencil" class="p-button-text"></button>
+            <button (click)="deleteComment(comment.id!)" pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-text"></button>
+        </div>
+
     </p-panel>
 
     <section class="scalein fadein">
@@ -58,10 +63,20 @@
             <!-- Boton submit -->
             <div class="flex justify-content-center">
                 <button 
+                    *ngIf="!showBtnEdit"
                     pButton 
                     type="submit" 
                     label="Agregar comentario"
                     class="ml-5">
+                </button>  
+
+                <button 
+                    *ngIf="showBtnEdit"
+                    pButton 
+                    type="button" 
+                    label="Editar comentario"
+                    class="ml-5"
+                    (click)="editComment()">
                 </button>                     
             </div>
 
