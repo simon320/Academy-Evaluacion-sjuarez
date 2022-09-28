@@ -19,7 +19,6 @@ export class HeaderComponent implements OnInit {
 
   editForm: FormGroup = this.fb.group({
     username: ['', [ Validators.required, Validators.minLength(4), Validators.pattern( this.vs.notEmpty ) ]],
-    email: ['', [ Validators.required, Validators.pattern( this.vs.emailPattern )] ],
     password: ['', [ Validators.required, Validators.minLength(6), Validators.pattern( this.vs.notEmpty ) ]]
   })
 
@@ -31,18 +30,6 @@ export class HeaderComponent implements OnInit {
       return 'El nombre debe tener al menos 4 caracteres.'
     } else if( errors?.['pattern'] ) {
       return 'Solo puedes usar letras y numeros.'
-    }
-    return '';
-  }
-
-  get emailErrorMsg(): string {
-    const errors = this.editForm.get('email')?.errors;
-    if( errors?.['required'] ) {
-      return 'El correo es obligatorio.'
-    } else if( errors?.['pattern'] ) {
-      return 'El formato del email es incorrecto.'
-    } else if( errors?.['emailExists'] ) {
-      return 'Ya hay un usuario registrado con ese email.'
     }
     return '';
   }
@@ -101,56 +88,57 @@ export class HeaderComponent implements OnInit {
     this.modalEdit = true;
   }
 
-  saveChanges() {
+  saveChanges(): void {
     if ( this.editForm.invalid ) {
       return;
     }
 
-    const { id } = this.currentUser;
-    const userEdit: User = {
-      id,
-      name: "",
-      username: this.editForm.get('username')?.value,
-      email: this.editForm.get('email')?.value,
-      password: this.editForm.get('password')?.value,
-      address: {
-          street: "",
-          suite: "",
-          city: "",
-          zipcode: "",
-          geo: {
-              lat: "",
-              lng: ""
-          }
-      },
-      phone: "",
-      website: "",
-      company: {
-          name: "",
-          catchPhrase: "",
-          bs: ""
-      }
-    }
-  
-    this.userService.getUserById( userEdit )
-      .subscribe({
-        next: _ => {
-          this.success = true;
-          this.setCurrentUser( userEdit )
-          setTimeout(()=> {
-            this.getCurrentUser();
-            this.modalEdit = false;
-            this.success = false;
-          }, 1500);
+    if (this.editForm.touched){ 
+      const { id } = this.currentUser;
+      const userEdit: User = {
+        id,
+        name: "",
+        username: this.editForm.get('username')?.value,
+        email: this.editForm.get('email')?.value,
+        password: this.editForm.get('password')?.value,
+        address: {
+            street: "",
+            suite: "",
+            city: "",
+            zipcode: "",
+            geo: {
+                lat: "",
+                lng: ""
+            }
         },
-        error: _ => {
-          this.error = true;
-          setTimeout(()=> {
-            this.error = false;
-          }, 1500);
+        phone: "",
+        website: "",
+        company: {
+            name: "",
+            catchPhrase: "",
+            bs: ""
         }
-      })
+      }
     
+      this.userService.getUserById( userEdit )
+        .subscribe({
+          next: _ => {
+            this.success = true;
+            this.setCurrentUser( userEdit )
+            setTimeout(()=> {
+              this.getCurrentUser();
+              this.modalEdit = false;
+              this.success = false;
+            }, 1500);
+          },
+          error: _ => {
+            this.error = true;
+            setTimeout(()=> {
+              this.error = false;
+            }, 1500);
+          }
+        })
+    }
   }
 
   close(): void {

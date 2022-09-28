@@ -1,4 +1,9 @@
 
+header {
+    background: #1f2d40;
+    border-bottom: 1px solid #51d951;
+}
+
 .container-form {
     position: fixed;
     z-index: 100;
@@ -8,7 +13,7 @@
 
     .form {
         background: #25364d;
-        width: 70%;
+        width: 90%;
         margin: 2rem auto;
         border-radius: 8px;
     }
