@@ -24,12 +24,8 @@ export class HomeComponent implements OnInit {
   }
 
   getAllPost(): void {
-    this.postService.getPost()
+    this.postService.getPosts()
     .subscribe( post => this.post = post );
-  }
-
-  showDetails( id: string): void {
-    this.postService.getPostForId(id)
   }
 
 }

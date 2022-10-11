@@ -12,32 +12,32 @@ import { environment } from '../../../environments/environment';
 })
 export class PostService {
 
-  private baseUrl: string = environment.baseUrl;
+  private herokuPost: string = environment.herokuPost;
 
   constructor( private http: HttpClient ) { }
 
-  getPost(): Observable<Post[]> {
-    return this.http.get<Post[]>( `${ this.baseUrl }/posts/` );
+  getPosts(): Observable<Post[]> {
+    return this.http.get<Post[]>( `${ this.herokuPost }/posts/` );
   }
 
-  getPostForId( id: string ): Observable<Post> {
-    return this.http.get<Post>(`${ this.baseUrl }/posts/${ id }`);
+  getPostById( id: string ): Observable<Post> {
+    return this.http.get<Post>(`${ this.herokuPost }/posts/${ id }`);
   }
 
   getCommets( id: string ): Observable<Comments[]> {
-    return this.http.get<Comments[]>( `${ this.baseUrl }/comments?postId=${ id }` );
+    return this.http.get<Comments[]>( `${ this.herokuPost }/comments?postId=${ id }` );
   }
 
   addCommets( comment: Comments ): Observable<Comments> {
-    return this.http.post<Comments>( `${ this.baseUrl }/comments?postId=${ comment.postId }`, comment );
+    return this.http.post<Comments>( `${ this.herokuPost }/comments?postId=${ comment.postId }`, comment );
   }
 
   editCommets( comment: Comments ): Observable<Comments> {
-    return this.http.put<Comments>( `${ this.baseUrl }/comments/${ comment.id }`, comment );
+    return this.http.put<Comments>( `${ this.herokuPost }/comments/${ comment.id }`, comment );
   }
 
   deleteCommets( id: number ): Observable<Comments>{
-    return this.http.delete<Comments>( `${ this.baseUrl }/comments/${ id }`);
+    return this.http.delete<Comments>( `${ this.herokuPost }/comments/${ id }`);
   }
 
 }

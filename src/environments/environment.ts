@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://simon-juarez-endpoint.herokuapp.com'
+  herokuPost: 'https://simon-juarez-endpoint.herokuapp.com'
 };
 
 /*

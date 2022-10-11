@@ -10,13 +10,13 @@ import { environment } from '../../../environments/environment';
 })
 export class EmailRegisterService implements AsyncValidator {
 
-  private baseUrl: string = environment.baseUrl;
+  private herokuPost: string = environment.herokuPost;
 
   constructor( private http: HttpClient ) { }
 
     validate( control: AbstractControl<any, any> ): Observable<ValidationErrors | null> {
         const email = control.value;
-        return this.http.get<User[]>( `${ this.baseUrl }/users?q=${ email }`)
+        return this.http.get<User[]>( `${ this.herokuPost }/users?q=${ email }`)
             .pipe(
                 map( resp => {
                     if ( resp.length !== 0){

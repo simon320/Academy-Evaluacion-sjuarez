@@ -38,7 +38,7 @@ export class DetailsComponent implements OnInit {
   getPostById(): void {
     this.activatedRoute.params
     .pipe(
-      switchMap( ({id}) => this.postService.getPostForId( id ) )
+      switchMap( ({id}) => this.postService.getPostById( id ) )
     )
     .subscribe({
       next: post => this.postDetails = post,

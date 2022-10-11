@@ -10,20 +10,20 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
 
-  private baseUrl: string = environment.baseUrl;
+  private herokuPost: string = environment.herokuPost;
 
   constructor( private http: HttpClient ) { }
 
   registerUser( user: User): Observable<User> {
-    return this.http.post<User>( `${ this.baseUrl }/users`, user );
+    return this.http.post<User>( `${ this.herokuPost }/users`, user );
   }
 
   getUserLogin( email: string ): Observable<User[]> {
-    return this.http.get<User[]>( `${ this.baseUrl }/users?q=${ email }`);
+    return this.http.get<User[]>( `${ this.herokuPost }/users?q=${ email }`);
   }
 
   getUserById( user: User ): Observable<User> {
-    return this.http.put<User>( `${ this.baseUrl }/users/${ user.id }`, user);
+    return this.http.put<User>( `${ this.herokuPost }/users/${ user.id }`, user);
   }
 
 }
