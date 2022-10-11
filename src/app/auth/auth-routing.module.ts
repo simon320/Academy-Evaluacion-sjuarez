@@ -17,8 +17,9 @@ const routes: Routes = [
         component: RegisterComponent
       },
       {
-        path: '**',
-        redirectTo: '404'
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
       }
     ]
   }

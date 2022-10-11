@@ -11,8 +11,7 @@ const routes: Routes = [
     component: HeaderComponent,
     children: [
       { path: '', component: HomeComponent },
-      { path: ':id', component: DetailsComponent },
-      { path: '**', redirectTo: '404' },
+      { path: ':id', component: DetailsComponent }
     ]
   }
 ]

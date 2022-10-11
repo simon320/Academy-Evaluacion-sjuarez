@@ -8,7 +8,7 @@ import { ToPersistGuard } from './auth/guards/to-persist.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'auth/login',
+    redirectTo: 'auth',
     pathMatch: 'full'
   },
   {
