@@ -14,7 +14,7 @@ export class EmailRegisterService implements AsyncValidator {
 
   constructor( private http: HttpClient ) { }
 
-    validate( control: AbstractControl<any, any> ): Observable<ValidationErrors | null> {
+    validate(control: AbstractControl): Observable<ValidationErrors | null> {
         const email = control.value;
         return this.http.get<User[]>( `${ this.herokuPost }/users?q=${ email }`)
             .pipe(
