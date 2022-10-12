@@ -37,9 +37,9 @@
             </div>
             <div class="h-1rem">
                 <small 
-                    *ngIf="notPass"
+                    *ngIf="wrongCredentials"
                     class="block text-center text-red-500 m-0"> 
-                    El password es incorrecto.
+                    Alguno de los campos, o ambos son incorrectos.
                 </small>
             </div>
         </div>
@@ -47,17 +47,10 @@
         <!-- Boton submit -->
         <div class="col-12 md:col-4 m-auto max-w-full">
             <div class="p-inputgroup flex align-items-center justify-content-center">
-                <button *ngIf="emailReady; else loginBtn"
+                <button
                     pButton
-                    type="button" 
-                    label="Continuar"
-                    (click)="getUser()"></button>
-                <ng-template #loginBtn>
-                    <button
-                        pButton
-                        type="submit" 
-                        label="Ingresar"></button>
-                </ng-template>
+                    type="submit" 
+                    label="Ingresar"></button>
             </div>
         </div>
 

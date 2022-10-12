@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../../../posts/interfaces/user.interface';
 import { UserService } from '../../../shared/services/user.service';
-import { EmailRegisterService } from '../../../shared/services/email-register.service';
+
 
 @Component({
   selector: 'app-login',
@@ -13,18 +13,16 @@ import { EmailRegisterService } from '../../../shared/services/email-register.se
 export class LoginComponent {
 
   currentUser: User[] = [];
-  notPass: boolean = false;
-  emailReady: boolean = true;
+  wrongCredentials: boolean = false;
 
   registerForm: FormGroup = this.fb.group({
-    email: ['', [ Validators.required ], [ this.emailRegister ] ],
-    password: [{value: '', disabled: true}, [ Validators.required ]]
+    email: ['', [ Validators.required ] ],
+    password: ['', [ Validators.required ]]
   })
 
   constructor( 
     private fb: FormBuilder,
     private userService: UserService,
-    private emailRegister: EmailRegisterService,
     private router: Router,
   ) {}
 
@@ -33,32 +31,22 @@ export class LoginComponent {
               && this.registerForm.get(input)?.touched;
   }
 
-  getUser() {
-    if( this.registerForm.get('email')?.invalid ){
-      return;
-    }
-      const { email }  = this.registerForm.value
+  login() {
+    const { email, password }  = this.registerForm.value
       
-      this.userService.getUserLogin( email )
+    this.userService.getUserLogin( email, password )
       .subscribe({
         next: user => {
-          this.currentUser = user
-          this.emailReady = false;
-          this.registerForm.get('email')?.disable()
-          this.registerForm.get('password')?.enable()
+          if(user.length === 0) {
+            this.wrongCredentials = true;
+          } else {
+            this.currentUser = user
+            localStorage.setItem('currentUser', JSON.stringify( this.currentUser[0] ))
+            this.router.navigate(['/post'])
+          }
         },
         error: err => console.log(err) 
       }) 
-  }
-
-  
-  login() {
-    const { password } = this.registerForm.value
-
-    if ( this.currentUser[0].password === password ){
-      localStorage.setItem('currentUser', JSON.stringify( this.currentUser[0] ))
-      this.router.navigate(['/post'])
-    } else { this.notPass = true }
   }
 
 }
