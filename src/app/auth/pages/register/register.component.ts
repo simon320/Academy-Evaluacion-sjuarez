@@ -9,7 +9,7 @@ import { EmailValidatorService } from '../../../shared/services/email-validator.
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['register.scss']
+  styleUrls: []
 })
 export class RegisterComponent {
 

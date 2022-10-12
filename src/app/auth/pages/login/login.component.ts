@@ -8,7 +8,7 @@ import { EmailRegisterService } from '../../../shared/services/email-register.se
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['login.scss']
+  styleUrls: []
 })
 export class LoginComponent {
 

@@ -9,3 +9,8 @@ body {
 a {
     color: #6abd6e;
 }
+
+.title__logo {
+    font-family: 'Caveat', cursive;
+    font-size: 5rem;
+}
