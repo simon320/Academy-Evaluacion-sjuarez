@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { DetailsComponent } from './pages/details/details.component';
 import { HomeComponent } from './pages/home/home.component';
-import { HeaderComponent } from '../shared/header/header.component';
+import { HeaderComponent } from '../shared/components/header/header.component';
 
 const routes: Routes = [
   {

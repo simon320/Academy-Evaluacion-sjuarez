@@ -4,34 +4,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
-import { PostsModule } from './posts/posts.module';
 
 import { AppComponent } from './app.component';
-import { ErrorPageComponent } from './shared/error-page/error-page.component';
 
 import localEs from '@angular/common/locales/es-AR';
 import { registerLocaleData } from '@angular/common';
-import { PrimeNgModule } from './prime-ng/prime-ng.module';
-import { HeaderComponent } from './shared/header/header.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from './shared/shared.module';
 
 registerLocaleData( localEs );
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ErrorPageComponent,
-    HeaderComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    PostsModule,
-    PrimeNgModule,
-    ReactiveFormsModule
+    SharedModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'es-AR' }],
   bootstrap: [AppComponent]
