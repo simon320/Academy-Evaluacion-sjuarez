@@ -15,15 +15,17 @@ export class RegisterComponent {
 
   success: boolean = false;
   error: boolean = false;
+  registerForm!: FormGroup;
 
-  registerForm: FormGroup = this.fb.group({
-    username: ['', [ Validators.required, Validators.minLength(4), Validators.pattern( this.vs.notEmpty ) ]],
-    email: ['', [ Validators.required, Validators.pattern( this.vs.emailPattern )], [ this.emailValidator ] ],
-    password: ['', [ Validators.required, Validators.minLength(6), Validators.pattern( this.vs.notEmpty ) ]],
-    password2: ['', [ Validators.required ]]
-  }, {
-    validators: [ this.vs.compareFields('password', 'password2') ]
-  })
+  constructor( 
+    private fb: FormBuilder,
+    private vs: ValidatorService,
+    private userService: UserService,
+    private validator: EmailValidatorService,
+    private router: Router,
+  ) {
+    this.createForm();
+  }
 
   get userErrorMsg(): string {
     const errors = this.registerForm.get('username')?.errors;
@@ -61,13 +63,16 @@ export class RegisterComponent {
     return '';
   }
 
-  constructor( 
-    private fb: FormBuilder,
-    private vs: ValidatorService,
-    private userService: UserService,
-    private emailValidator: EmailValidatorService,
-    private router: Router,
-  ) {}
+  createForm() {
+    this.registerForm = this.fb.group({
+      username: ['', [ Validators.required, Validators.minLength(4), Validators.pattern( this.vs.notEmpty ) ]],
+      email: ['', [ Validators.required, Validators.pattern( this.vs.emailPattern )], this.validator ],
+      password: ['', [ Validators.required, Validators.minLength(6), Validators.pattern( this.vs.notEmpty ) ]],
+      password2: ['', [ Validators.required ]]
+    }, {
+      validators: [ this.vs.compareFields('password', 'password2') ]
+    })
+  }
 
   inputInvalid( input: string ): boolean | undefined {
     return this.registerForm.get(input)?.invalid

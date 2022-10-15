@@ -12,7 +12,7 @@ import { UserService } from '../../../shared/services/user.service';
 })
 export class LoginComponent {
 
-  currentUser: User[] = [];
+  currentUser!: User;
   wrongCredentials: boolean = false;
 
   registerForm: FormGroup = this.fb.group({
@@ -40,8 +40,9 @@ export class LoginComponent {
           if(user.length === 0) {
             this.wrongCredentials = true;
           } else {
-            this.currentUser = user
-            localStorage.setItem('currentUser', JSON.stringify( this.currentUser[0] ))
+            this.currentUser = user[0]
+            delete this.currentUser.password
+            localStorage.setItem('currentUser', JSON.stringify( this.currentUser ))
             this.router.navigate(['/post'])
           }
         },

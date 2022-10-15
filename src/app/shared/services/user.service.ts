@@ -18,12 +18,12 @@ export class UserService {
     return this.http.post<User>( `${ this.herokuPost }/users`, user );
   }
 
-    // getUserLogin( email: string ): Observable<User[]> {
-    //   return this.http.get<User[]>( `${ this.herokuPost }/users?q=${ email }`);
-    // }
-
   getUserLogin( email: string, pass: string ): Observable<User[]> {
     return this.http.get<User[]>( `${ this.herokuPost }/users?email=${ email }&password=${ pass }`);
+  }
+
+  getUserByEmail( email: string ): Observable<User[]> {
+    return this.http.get<User[]>( `${ this.herokuPost }/users?email=${ email }`);
   }
 
   getUserById( user: User ): Observable<User> {

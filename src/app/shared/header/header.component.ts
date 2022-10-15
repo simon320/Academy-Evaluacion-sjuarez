@@ -8,20 +8,50 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.scss']
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
 
   currentUser!: User;
+  currentUserPassword!: string;
   success: boolean = false;
   error: boolean = false;
   modalEdit: boolean = false;
+  editPassword: boolean = false;
+  checkPass: boolean = false;
+  wrongPass: boolean = false;
+  editForm!: FormGroup;
+  editFormPass!: FormGroup;
 
-  editForm: FormGroup = this.fb.group({
-    username: ['', [ Validators.required, Validators.minLength(4), Validators.pattern( this.vs.notEmpty ) ]],
-    password: ['', [ Validators.required, Validators.minLength(6), Validators.pattern( this.vs.notEmpty ) ]]
-  })
+  constructor( 
+    private fb: FormBuilder,
+    private vs: ValidatorService,
+    private userService: UserService,
+    private router: Router
+  ) {}
 
+  ngOnInit() {
+      this.getCurrentUser()
+      this.createForm()
+      this.resetForm()
+  }
+
+  createForm(): void {
+    this.editForm = this.fb.group({
+      username: ['', [ Validators.required, Validators.pattern( this.vs.notEmpty ) ]],
+      name: ['', [ Validators.required, Validators.minLength(4), Validators.pattern( this.vs.nameAndLastNamePattern) ]],
+      phone: ['', [ Validators.required, Validators.minLength(10) ]],
+    })
+
+    this.editFormPass = this.fb.group({
+      password: ['', [ Validators.required] ],
+      newPassword: ['', [ Validators.required, Validators.minLength(6), Validators.pattern( this.vs.notEmpty ) ]],
+      confirmNewPassword: ['', [ Validators.required ]]
+    }, {
+      validators: [ this.vs.compareFields('newPassword', 'confirmNewPassword') ]
+    })
+}
+  
   get userErrorMsg(): string {
     const errors = this.editForm.get('username')?.errors;
     if( errors?.['required'] ) {
@@ -34,8 +64,28 @@ export class HeaderComponent implements OnInit {
     return '';
   }
 
+  get nameErrorMsg(): string {
+    const errors = this.editForm.get('name')?.errors;
+    if( errors?.['required'] ) {
+      return 'El nombre de usuario es obligatorio.'
+    } else if( errors?.['pattern'] ) {
+      return 'El campo debe tener un apellido y un nombre.'
+    }
+    return '';
+  }
+
+  get phoneErrorMsg(): string {
+    const errors = this.editForm.get('phone')?.errors;
+    if( errors?.['required'] ) {
+      return 'El nombre de usuario es obligatorio.'
+    } else if( errors?.['minlength']) {
+      return 'El numero no es correcto.'
+    }
+    return '';
+  }
+
   get passErrorMsg(): string {
-    const errors = this.editForm.get('password')?.errors;
+    const errors = this.editFormPass.get('newPassword')?.errors;
     if( errors?.['required'] ) {
       return 'La contraseña es obligatoria.'
     } else if( errors?.['minlength'] ) {
@@ -46,23 +96,11 @@ export class HeaderComponent implements OnInit {
     return '';
   }
 
-  constructor( 
-    private fb: FormBuilder,
-    private vs: ValidatorService,
-    private userService: UserService,
-    private router: Router
-  ) {}
-
-  ngOnInit() {
-      this.getCurrentUser()
-      this.resetForm()
-  }
-
   resetForm(): void {
     this.editForm.reset({
+      name: this.currentUser.name,
       username: this.currentUser.username,
-      email: this.currentUser.email,
-      password: this.currentUser.password
+      phone: this.currentUser.phone
     })
   }
 
@@ -74,33 +112,61 @@ export class HeaderComponent implements OnInit {
     localStorage.setItem('currentUser', JSON.stringify( user ))
   }
 
-  inputInvalid( input: string ): boolean | undefined {
-    return this.editForm.get(input)?.invalid
-              && this.editForm.get(input)?.touched;
+  // inputInvalid( input: string ): boolean | undefined {
+  //   return this.editForm.get(input)?.invalid
+  //             && this.editForm.get(input)?.touched;
+  // }
+
+  inputValid( form: FormGroup, input: string ): boolean | undefined {
+    return form.get(input)?.valid
+              && form.get(input)?.touched;
   }
 
-  inputValid( input: string ): boolean | undefined {
-    return this.editForm.get(input)?.valid
-              && this.editForm.get(input)?.touched;
+  getPassword(): void {
+    this.userService.getUserByEmail( this.currentUser.email )
+    .subscribe({
+      next: user => {
+        const { password } = user[0]
+        if ( password ) {
+           this.currentUserPassword = password
+        }
+      },
+      error: err => console.error(err)
+    })
   }
 
   showEditUser(): void {
     this.modalEdit = true;
+    this.getPassword();
   }
 
-  saveChanges(): void {
-    if ( this.editForm.invalid ) {
-      return;
+  showInputPassword() {
+    this.editPassword = !this.editPassword;
+  }
+
+  confirmPass() {
+    const password = this.editFormPass.get('password')?.value
+    if( password === this.currentUserPassword ) {
+      this.checkPass = true;
+      this.wrongPass = false;
+    } else {
+      this.wrongPass = true;
+    }
+  }
+
+  savePersonalData(): void {
+    if(this.editForm.invalid) {
+      return
     }
 
-    if (this.editForm.touched){ 
-      const { id } = this.currentUser;
+    if ( this.editForm.touched ){
+      const { id, email } = this.currentUser;
       const userEdit: User = {
         id,
-        name: "",
+        name: this.editForm.get('name')?.value,
         username: this.editForm.get('username')?.value,
-        email: this.editForm.get('email')?.value,
-        password: this.editForm.get('password')?.value,
+        email,
+        password: this.currentUserPassword,
         address: {
             street: "",
             suite: "",
@@ -111,7 +177,7 @@ export class HeaderComponent implements OnInit {
                 lng: ""
             }
         },
-        phone: "",
+        phone: this.editForm.get('phone')?.value,
         website: "",
         company: {
             name: "",
@@ -119,11 +185,53 @@ export class HeaderComponent implements OnInit {
             bs: ""
         }
       }
-    
-      this.userService.getUserById( userEdit )
+
+      this.loadChange( userEdit )
+    }
+  }
+
+  savePassword(): void {
+    if(this.editFormPass.invalid) {
+      return
+    }
+
+    if ( this.editFormPass.touched ){
+      const { id, email } = this.currentUser;
+      const userEdit: User = {
+        id,
+        name: this.currentUser.name,
+        username: this.currentUser.username,
+        email,
+        password: this.editFormPass.get('newPassword')?.value,
+        address: {
+            street: "",
+            suite: "",
+            city: "",
+            zipcode: "",
+            geo: {
+                lat: "",
+                lng: ""
+            }
+        },
+        phone: this.currentUser.phone,
+        website: "",
+        company: {
+            name: "",
+            catchPhrase: "",
+            bs: ""
+        }
+      }
+
+      this.loadChange( userEdit )
+    }
+  }
+
+  loadChange( userEdit: User ) {
+    this.userService.getUserById( userEdit )
         .subscribe({
           next: _ => {
             this.success = true;
+            delete userEdit.password
             this.setCurrentUser( userEdit )
             setTimeout(()=> {
               this.getCurrentUser();
@@ -138,7 +246,6 @@ export class HeaderComponent implements OnInit {
             }, 1500);
           }
         })
-    }
   }
 
   close(): void {
@@ -147,6 +254,7 @@ export class HeaderComponent implements OnInit {
       if ( confirm('¿Desea cerrar la ventana? Perdera los cambios.') ){
         this.resetForm();
         this.modalEdit = false;
+        this.checkPass = false;
       } else {
         return;
       }

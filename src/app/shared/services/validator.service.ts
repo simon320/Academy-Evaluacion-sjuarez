@@ -7,6 +7,7 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 })
 export class ValidatorService {
   public emailPattern: string = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+  public nameAndLastNamePattern: string = "([a-zA-Z]+) ([a-zA-Z]+)";
   public notEmpty: string = '[A-Za-z0-9]+';
 
   compareFields(field1: string, field2: string): ValidationErrors | null {
@@ -14,13 +15,13 @@ export class ValidatorService {
       const pass1 = form.get(field1)?.value;
       const pass2 = form.get(field2)?.value;
 
-      if (pass1 !== pass2) {
-        form.get('password2')?.setErrors({ notEquals: true });
+      if (String(pass1) !== String(pass2)) {
+        form.get(field2)?.setErrors({ notEquals: true });
         return { notEquals: true };
       }
 
-      if (form.get('password2')?.touched) {
-        form.get('password2')?.setErrors(null);
+      if (form.get(field2)?.touched) {
+        form.get(field2)?.setErrors(null);
       }
       return null;
     };
