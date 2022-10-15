@@ -14,17 +14,20 @@ export class LoginComponent {
 
   currentUser!: User;
   wrongCredentials: boolean = false;
-
-  registerForm: FormGroup = this.fb.group({
-    email: ['', [ Validators.required ] ],
-    password: ['', [ Validators.required ]]
-  })
+  registerForm!: FormGroup;
 
   constructor( 
     private fb: FormBuilder,
     private userService: UserService,
     private router: Router,
-  ) {}
+  ) { this.createForm() }
+  
+  createForm() {
+    this.registerForm = this.fb.group({
+      email: ['', [ Validators.required ] ],
+      password: ['', [ Validators.required ]]
+    })
+  }
 
   inputInvalid( input: string ): boolean | undefined {
     return this.registerForm.get(input)?.invalid

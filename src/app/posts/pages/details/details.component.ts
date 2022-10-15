@@ -28,8 +28,7 @@ export class DetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private postService: PostService,
     private router: Router
-  ) { };
-
+  ) { }
 
   ngOnInit(): void {
     this.getPostById();

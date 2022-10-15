@@ -23,9 +23,7 @@ export class RegisterComponent {
     private userService: UserService,
     private validator: EmailValidatorService,
     private router: Router,
-  ) {
-    this.createForm();
-  }
+  ) { this.createForm(); }
 
   get userErrorMsg(): string {
     const errors = this.registerForm.get('username')?.errors;
