@@ -4,13 +4,15 @@ import { PrimeNgModule } from './prime-ng/prime-ng.module';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 
 
 @NgModule({
   declarations: [
     ErrorPageComponent,
-    HeaderComponent
+    HeaderComponent,
+    SpinnerComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   exports: [
     ErrorPageComponent,
     HeaderComponent,
-    PrimeNgModule
+    PrimeNgModule,
+    SpinnerComponent
   ]
 })
 export class SharedModule { }

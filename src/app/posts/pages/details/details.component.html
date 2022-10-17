@@ -13,8 +13,7 @@
     
     <h4> {{ postDetails.body }} </h4>
     
-    <app-comments [postDetails]="postDetails"
-        (dateEvent)="showDate($event)">
+    <app-comments (dateEvent)="showDate($event)">
     </app-comments>
 
 </div>

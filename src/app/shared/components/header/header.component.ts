@@ -4,6 +4,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ValidatorService } from '../../services/validator.service';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -17,11 +18,11 @@ export class HeaderComponent implements OnInit {
   success: boolean = false;
   error: boolean = false;
   modalEdit: boolean = false;
-  editPassword: boolean = false;
   checkPass: boolean = false;
   wrongPass: boolean = false;
   editForm!: FormGroup;
   editFormPass!: FormGroup;
+  timer$ = timer(1500);
 
   constructor( 
     private fb: FormBuilder,
@@ -105,6 +106,10 @@ export class HeaderComponent implements OnInit {
   }
 
   getCurrentUser(): void {
+    if(!localStorage.getItem('currentUser')){
+      return    
+    }
+
     this.currentUser = JSON.parse( localStorage.getItem('currentUser')! )
   }
 
@@ -112,14 +117,15 @@ export class HeaderComponent implements OnInit {
     localStorage.setItem('currentUser', JSON.stringify( user ))
   }
 
-  // inputInvalid( input: string ): boolean | undefined {
-  //   return this.editForm.get(input)?.invalid
-  //             && this.editForm.get(input)?.touched;
-  // }
+  inputCheck( form: FormGroup, input: string, type: string ): boolean | undefined {
+    if( type === 'invalid' ) {
+      return form.get(input)?.invalid
+        && form.get(input)?.touched;
+    } else if( type === 'valid' ){
+      return form.get(input)?.valid
+        && form.get(input)?.touched;
+    } else { return undefined }
 
-  inputValid( form: FormGroup, input: string ): boolean | undefined {
-    return form.get(input)?.valid
-              && form.get(input)?.touched;
   }
 
   getPassword(): void {
@@ -138,10 +144,6 @@ export class HeaderComponent implements OnInit {
   showEditUser(): void {
     this.modalEdit = true;
     this.getPassword();
-  }
-
-  showInputPassword() {
-    this.editPassword = !this.editPassword;
   }
 
   confirmPass() {
@@ -233,17 +235,17 @@ export class HeaderComponent implements OnInit {
             this.success = true;
             delete userEdit.password
             this.setCurrentUser( userEdit )
-            setTimeout(()=> {
+            this.timer$.subscribe( _ => {
               this.getCurrentUser();
               this.modalEdit = false;
               this.success = false;
-            }, 1500);
+            });
           },
           error: _ => {
             this.error = true;
-            setTimeout(()=> {
+            this.timer$.subscribe( _ => {
               this.error = false;
-            }, 1500);
+            });
           }
         })
   }

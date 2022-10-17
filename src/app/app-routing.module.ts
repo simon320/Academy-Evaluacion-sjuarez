@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ErrorPageComponent } from './shared/pages/error-page/error-page.component';
-import { AuthGuard } from './auth/guards/auth.guard';
-import { ToPersistGuard } from './auth/guards/to-persist.guard';
+import { ToPersistGuard } from './guards/to-persist.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {

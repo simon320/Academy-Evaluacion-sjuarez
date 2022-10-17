@@ -15,14 +15,14 @@
                     placeholder="Nombre de Usuario"
                     formControlName="username"> 
                 <em 
-                    *ngIf="inputValid('username')"
+                    *ngIf="inputCheck('username', 'valid')"
                     style="color: #00ff00" 
                     class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
                 </em>
             </div>
 
             <div class="h-1rem">
-                <small *ngIf="inputInvalid('username')" class="text-center p-error block">
+                <small *ngIf="inputCheck('username', 'invalid')" class="text-center p-error block">
                     {{ userErrorMsg }}
                 </small>        
             </div>    
@@ -38,7 +38,7 @@
                     placeholder="Email"
                     formControlName="email">
                 <em 
-                    *ngIf="inputValid('email')"
+                    *ngIf="inputCheck('email', 'valid')"
                     style="color: #00ff00" 
                     class="pi pi-check absolute right-0 align-self-center mr-2 z-5 scalein fadein">
                 </em> 
@@ -46,7 +46,7 @@
             </div>
             <div class="h-1rem">
                 <small 
-                    *ngIf="inputInvalid('email')"
+                    *ngIf="inputCheck('email', 'invalid')"
                     class="text-center p-error block"> 
                         {{ emailErrorMsg }}
                 </small>
@@ -63,14 +63,14 @@
                     placeholder="Contraseña"
                     formControlName="password">
                 <em 
-                    *ngIf="inputValid('password')"
+                    *ngIf="inputCheck('password', 'valid')"
                     style="color: #00ff00" 
                     class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
                 </em>
             </div>
             <div class="h-1rem">
                 <small 
-                    *ngIf="inputInvalid('password')"
+                    *ngIf="inputCheck('password', 'invalid')"
                     class="text-center p-error block"> 
                     {{ passErrorMsg }} 
                 </small>
@@ -87,14 +87,14 @@
                     placeholder="Repita la contraseña"
                     formControlName="password2">
                 <em 
-                    *ngIf="inputValid('password') && inputValid('password2')"
+                    *ngIf="inputCheck('password', 'valid') && inputCheck('password2', 'valid')"
                     style="color: #00ff00" 
                     class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
                 </em>
             </div>
             <div class="h-1rem">
                 <small 
-                    *ngIf="inputInvalid('password2')"
+                    *ngIf="inputCheck('password2', 'invalid')"
                     class="text-center p-error block"> 
                         Las contraseñas no coinsiden. 
                 </small>

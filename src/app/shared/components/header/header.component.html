@@ -22,13 +22,13 @@
                     <label class="block">Apellido y nombre</label>
                     <div class="p-inputgroup flex relative">
                         <input pInputText type="text" placeholder="Apellido y nombre" formControlName="name">
-                        <em *ngIf="inputValid(editForm, 'name')" style="color: #00ff00"
+                        <em *ngIf="inputCheck(editForm, 'name', 'valid')" style="color: #00ff00"
                             class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
                         </em>
                     </div>
 
                     <div class="h-1rem">
-                        <small *ngIf="!inputValid(editForm, 'name')" class="text-center p-error block">
+                        <small *ngIf="inputCheck(editForm, 'name', 'invalid')" class="text-center p-error block">
                             {{ nameErrorMsg }}
                         </small>
                     </div>
@@ -39,13 +39,13 @@
                     <label class="block">Nombre de Usuario</label>
                     <div class="p-inputgroup flex relative">
                         <input pInputText type="text" placeholder="Nombre de Usuario" formControlName="username">
-                        <em *ngIf="inputValid(editForm, 'username')" style="color: #00ff00"
+                        <em *ngIf="inputCheck(editForm, 'username', 'valid')" style="color: #00ff00"
                             class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
                         </em>
                     </div>
 
                     <div class="h-1rem">
-                        <small *ngIf="!inputValid(editForm, 'username')" class="text-center p-error block">
+                        <small *ngIf="inputCheck(editForm, 'username', 'invalid')" class="text-center p-error block">
                             {{ userErrorMsg }}
                         </small>
                     </div>
@@ -56,13 +56,13 @@
                     <label class="block">Teléfono</label>
                     <div class="p-inputgroup flex relative">
                         <input pInputText type="text" placeholder="Teléfono" formControlName="phone">
-                        <em *ngIf="inputValid(editForm, 'phone')" style="color: #00ff00"
+                        <em *ngIf="inputCheck(editForm, 'phone', 'valid')" style="color: #00ff00"
                             class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
                         </em>
                     </div>
 
                     <div class="h-1rem">
-                        <small *ngIf="!inputValid(editForm, 'phone')" class="text-center p-error block">
+                        <small *ngIf="inputCheck(editForm, 'phone', 'invalid')" class="text-center p-error block">
                             {{ phoneErrorMsg }}
                         </small>
                     </div>
@@ -99,13 +99,13 @@
                         <label class="block">Nueva contraseña</label>
                         <div class="p-inputgroup flex relative">
                             <input pInputText type="password" placeholder="Nueva contraseña" formControlName="newPassword">
-                            <em *ngIf="inputValid(editFormPass, 'newPassword')" style="color: #00ff00"
+                            <em *ngIf="inputCheck(editFormPass, 'newPassword', 'valid' )" style="color: #00ff00"
                                 class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
                             </em>
                         </div>
                         <div class="h-1rem">
                             <small 
-                                *ngIf="!inputValid(editFormPass, 'newPassword') && editFormPass.get('newPassword')?.touched" 
+                                *ngIf="inputCheck(editFormPass, 'newPassword', 'invalid')" 
                                 class="text-center p-error block">
                                 {{ passErrorMsg }}
                             </small>
@@ -117,13 +117,13 @@
                         <label class="block">Repita la contraseña</label>
                         <div class="p-inputgroup flex relative">
                             <input pInputText type="password" placeholder="Repita la contraseña" formControlName="confirmNewPassword">
-                            <em *ngIf="inputValid(editFormPass, 'confirmNewPassword')" style="color: #00ff00"
+                            <em *ngIf="inputCheck(editFormPass, 'confirmNewPassword', 'valid')" style="color: #00ff00"
                                 class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
                             </em>
                         </div>
                         <div class="h-1rem">
                             <small 
-                                *ngIf="!inputValid(editFormPass, 'confirmNewPassword') && editFormPass.get('confirmNewPassword')?.touched"
+                                *ngIf="inputCheck(editFormPass, 'confirmNewPassword', 'invalid')"
                                 class="text-center p-error block">
                                 Las contraseñas no coinsiden. 
                             </small>

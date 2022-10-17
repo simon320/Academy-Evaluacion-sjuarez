@@ -19,9 +19,8 @@ import { ValidatorService } from '../../../shared/services/validator.service';
   `]
 })
 export class CommentsComponent implements OnInit {
-
-  @Input() postDetails!: Post;
-
+  
+  @Output() dateEvent: EventEmitter<Date> = new EventEmitter();
   date: Date = new Date();
   comments: Comments[] = [];
   validationToggle: boolean = false;
@@ -30,15 +29,19 @@ export class CommentsComponent implements OnInit {
   postId!: number;
   commentId!: number;
   showBtnEdit: boolean = false;
+  commentForm!: FormGroup;
 
-  @Output() dateEvent: EventEmitter<Date> = new EventEmitter();
+  constructor( 
+    private postService: PostService,
+    private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    private vs: ValidatorService
+  ) { this.createForm() }
 
-  commentForm: FormGroup = this.fb.group({
-    name: ['', [ Validators.required ]],
-    body: ['', [ Validators.required, Validators.maxLength(200)]],
-  }, {
-    validators: [ this.vs.empty('name'), this.vs.empty('body')]
-  })
+  ngOnInit(): void {
+    this.getComments();
+    this.getCurrentUser();
+  }
 
   get nameErrorMsg(): string {
     const errors = this.commentForm.get('name')?.errors;
@@ -62,16 +65,13 @@ export class CommentsComponent implements OnInit {
     return '';
   }
 
-  constructor( 
-    private postService: PostService,
-    private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder,
-    private vs: ValidatorService
-  ) { }
-
-  ngOnInit(): void {
-    this.getComments();
-    this.getCurrentUser();
+  createForm(){
+    this.commentForm = this.fb.group({
+      name: ['', [ Validators.required ]],
+      body: ['', [ Validators.required, Validators.maxLength(200)]],
+    }, {
+      validators: [ this.vs.empty('name'), this.vs.empty('body')]
+    })
   }
 
   inputInvalid( input: string ): boolean | undefined {
@@ -80,6 +80,10 @@ export class CommentsComponent implements OnInit {
   }
 
   getCurrentUser(): void {
+    if(!localStorage.getItem('currentUser')){
+      return    
+    }
+
     this.currentUser = JSON.parse( localStorage.getItem('currentUser')! )
   }
 

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { User } from '../../../posts/interfaces/user.interface';
 import { UserService } from '../../../shared/services/user.service';
 import { EmailValidatorService } from '../../../shared/services/email-validator.service';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ export class RegisterComponent {
   success: boolean = false;
   error: boolean = false;
   registerForm!: FormGroup;
+  timer$ = timer(1500);
 
   constructor( 
     private fb: FormBuilder,
@@ -64,7 +66,7 @@ export class RegisterComponent {
   createForm() {
     this.registerForm = this.fb.group({
       username: ['', [ Validators.required, Validators.minLength(4), Validators.pattern( this.vs.notEmpty ) ]],
-      email: ['', [ Validators.required, Validators.pattern( this.vs.emailPattern )], this.validator ],
+      email: ['', [ Validators.required, Validators.pattern( this.vs.emailPattern )], [ this.validator ] ],
       password: ['', [ Validators.required, Validators.minLength(6), Validators.pattern( this.vs.notEmpty ) ]],
       password2: ['', [ Validators.required ]]
     }, {
@@ -72,14 +74,15 @@ export class RegisterComponent {
     })
   }
 
-  inputInvalid( input: string ): boolean | undefined {
-    return this.registerForm.get(input)?.invalid
-              && this.registerForm.get(input)?.touched;
-  }
+  inputCheck( input: string, type: string ): boolean | undefined {
+    if( type === 'invalid' ) {
+      return this.registerForm.get(input)?.invalid
+        && this.registerForm.get(input)?.touched;
+    } else if( type === 'valid' ){
+      return this.registerForm.get(input)?.valid
+        && this.registerForm.get(input)?.touched;
+    } else { return undefined }
 
-  inputValid( input: string ): boolean | undefined {
-    return this.registerForm.get(input)?.valid
-              && this.registerForm.get(input)?.touched;
   }
 
   createRegister(): void {
@@ -117,16 +120,16 @@ export class RegisterComponent {
       .subscribe({
         next: _ => {
           this.success = true;
-          setTimeout(()=> {
+          this.timer$.subscribe( _ => {
             this.router.navigate(['/auth/login'])
-          }, 1000);
+          });
         },
         error: _ => {
           this.error = true;
-          setTimeout(()=> {
+          this.timer$.subscribe( _ => {
             this.error = false;
             this.registerForm.reset({})
-          }, 1500);
+          });
         }
       });
   }
