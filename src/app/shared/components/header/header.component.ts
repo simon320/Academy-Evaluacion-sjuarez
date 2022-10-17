@@ -188,7 +188,7 @@ export class HeaderComponent implements OnInit {
         }
       }
 
-      this.loadChange( userEdit )
+      this.uploadChange( userEdit )
     }
   }
 
@@ -224,11 +224,11 @@ export class HeaderComponent implements OnInit {
         }
       }
 
-      this.loadChange( userEdit )
+      this.uploadChange( userEdit )
     }
   }
 
-  loadChange( userEdit: User ) {
+  uploadChange( userEdit: User ) {
     this.userService.getUserById( userEdit )
         .subscribe({
           next: _ => {

@@ -95,7 +95,7 @@ export class CommentsComponent implements OnInit {
     )
     .subscribe({
       next: comment => this.comments = comment,
-      error: err => console.log(err)
+      error: err => console.error(err)
     });
   }
 
@@ -132,7 +132,7 @@ export class CommentsComponent implements OnInit {
           this.emitDate();
           this.getComments();
         },
-        error: err => console.log(err)
+        error: err => console.error(err)
       })
   }
 
@@ -166,7 +166,7 @@ export class CommentsComponent implements OnInit {
           this.emitDate();
           this.getComments();
         },
-        error: err => console.log(err)
+        error: err => console.error(err)
       })
   }
 
@@ -179,7 +179,7 @@ export class CommentsComponent implements OnInit {
         next: _ => {
           this.getComments();
         },
-        error: err => console.log(err)
+        error: err => console.error(err)
       });
   }
 

@@ -49,7 +49,7 @@ export class LoginComponent {
             this.router.navigate(['/post'])
           }
         },
-        error: err => console.log(err)
+        error: err => console.error(err)
       }) 
   }
 

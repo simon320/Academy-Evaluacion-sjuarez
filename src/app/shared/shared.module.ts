@@ -5,11 +5,13 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { AlertComponent } from './components/alert/alert.component';
 
 
 
 @NgModule({
   declarations: [
+    AlertComponent,
     ErrorPageComponent,
     HeaderComponent,
     SpinnerComponent
@@ -20,6 +22,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     ReactiveFormsModule
   ],
   exports: [
+    AlertComponent,
     ErrorPageComponent,
     HeaderComponent,
     PrimeNgModule,
