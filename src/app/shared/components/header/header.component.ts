@@ -13,8 +13,8 @@ import { timer } from 'rxjs';
 })
 export class HeaderComponent implements OnInit {
 
-  currentUser!: User;
-  // currentUserPassword!: string;
+  uid!: string;
+  currentUser!: any;
   success: boolean = false;
   error: boolean = false;
   modalEdit: boolean = false;
@@ -29,13 +29,11 @@ export class HeaderComponent implements OnInit {
     private vs: ValidatorService,
     private userService: UserService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
-    // console.log( this.userService.userInfo$.subscribe( console.log))
-        // this.getCurrentUser()
+      this.getCurrentUser() 
       this.createForm()
-      console.log(this.userService.getAllUser())
       this.resetForm()
   }
 
@@ -101,10 +99,8 @@ export class HeaderComponent implements OnInit {
 
   resetForm(): void {
     this.editForm.reset({
-      name: '',
-      username: '',
-      // name: this.currentUser.name,
-      // username: this.currentUser.username,
+      name: this.currentUser.name,
+      username: this.currentUser.username,
     })
   }
 
@@ -113,7 +109,7 @@ export class HeaderComponent implements OnInit {
       return    
     }
 
-    // this.currentUser = JSON.parse( localStorage.getItem('currentUser')! )
+    this.currentUser = JSON.parse( localStorage.getItem('currentUser')! )
   }
 
   setCurrentUser( user: User): void {
@@ -220,25 +216,25 @@ export class HeaderComponent implements OnInit {
   }
 
   uploadChange( userEdit: User ) {
-    this.userService.getUserById( userEdit )
-        .subscribe({
-          next: _ => {
-            this.success = true;
-            delete userEdit.password
-            this.setCurrentUser( userEdit )
-            this.timer$.subscribe( _ => {
-              this.getCurrentUser();
-              this.modalEdit = false;
-              this.success = false;
-            });
-          },
-          error: _ => {
-            this.error = true;
-            this.timer$.subscribe( _ => {
-              this.error = false;
-            });
-          }
-        })
+    // this.userService.getUserById( userEdit )
+    //     .subscribe({
+    //       next: _ => {
+    //         this.success = true;
+    //         delete userEdit.password
+    //         this.setCurrentUser( userEdit )
+    //         this.timer$.subscribe( _ => {
+    //           this.getCurrentUser();
+    //           this.modalEdit = false;
+    //           this.success = false;
+    //         });
+    //       },
+    //       error: _ => {
+    //         this.error = true;
+    //         this.timer$.subscribe( _ => {
+    //           this.error = false;
+    //         });
+    //       }
+    //     })
   }
 
   close(): void {
@@ -261,7 +257,7 @@ export class HeaderComponent implements OnInit {
     if ( confirm('¿Desea cerrar la sesion?') ){
       this.userService.logout()
         .then(() => {
-          // localStorage.removeItem('currentUser');
+          localStorage.removeItem('currentUser');
           this.router.navigate(['/auth/login']);
         })
         .catch( error => console.error(error) )
