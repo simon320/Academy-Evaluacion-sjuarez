@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angular-la-post": {
+      "hosting": {
+        "primer-evaluacion-academy": [
+          "angular-la-post"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "angular-la-post"
+  }
+}

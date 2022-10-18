@@ -4,7 +4,7 @@
 
     <h2 class="text-center">Ingresar</h2>
 
-    <form (ngSubmit)="login()" [formGroup]="registerForm" autocomplete="off">
+    <form (ngSubmit)="login()" [formGroup]="loginForm" autocomplete="off">
 
         <!-- Email -->
         <div class="col-12 md:col-4 m-auto">
@@ -37,9 +37,9 @@
             </div>
             <div class="h-1rem">
                 <small 
-                    *ngIf="wrongCredentials"
+                    *ngIf="inputInvalid('password')"
                     class="block text-center text-red-500 m-0"> 
-                    Alguno de los campos, o ambos son incorrectos.
+                    La contraseña es incorrecta.
                 </small>
             </div>
         </div>
