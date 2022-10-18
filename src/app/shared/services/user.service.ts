@@ -5,6 +5,9 @@ import { environment } from '../../../environments/environment';
 import { User } from '../../posts/interfaces/user.interface';
 import { Observable } from 'rxjs';
 
+import { AngularFireAuth } from '@angular/fire/compat/auth'
+import { collectionData, Firestore, collection, addDoc, setDoc, doc } from '@angular/fire/firestore'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +15,43 @@ export class UserService {
 
   private herokuPost: string = environment.herokuPost;
 
-  constructor( private http: HttpClient ) { }
+  public userInfo$!: Observable<any>;
+  user$!: Observable<any>;
+
+
+  constructor( 
+    private http: HttpClient,
+    private auth: AngularFireAuth,
+    private firestore: Firestore
+  ) {}
+
+
+  register( email: string, password: string ) {
+    return this.auth.createUserWithEmailAndPassword( email, password );
+  }
+
+  login( email: string, password: string ) {
+    return this.auth.signInWithEmailAndPassword( email, password );
+  }
+
+  logout() {
+    return this.auth.signOut();
+  }
+
+  addUser( uid: string, user: any) {
+    return setDoc(doc(this.firestore, "user", uid), user);
+  }
+
+  // addUser( user: any) {
+  //   const userRef = collection(this.firestore, 'user');
+  //   return addDoc((userRef), user);
+  // }
+
+  getAllUser() {
+    const coll = collection(this.firestore, 'user');
+    this.user$ = collectionData(coll);
+  }
+
 
   registerUser( user: User): Observable<User> {
     return this.http.post<User>( `${ this.herokuPost }/users`, user );

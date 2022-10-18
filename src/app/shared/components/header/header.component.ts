@@ -14,7 +14,7 @@ import { timer } from 'rxjs';
 export class HeaderComponent implements OnInit {
 
   currentUser!: User;
-  currentUserPassword!: string;
+  // currentUserPassword!: string;
   success: boolean = false;
   error: boolean = false;
   modalEdit: boolean = false;
@@ -32,8 +32,10 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-      this.getCurrentUser()
+    // console.log( this.userService.userInfo$.subscribe( console.log))
+        // this.getCurrentUser()
       this.createForm()
+      console.log(this.userService.getAllUser())
       this.resetForm()
   }
 
@@ -99,9 +101,10 @@ export class HeaderComponent implements OnInit {
 
   resetForm(): void {
     this.editForm.reset({
-      name: this.currentUser.name,
-      username: this.currentUser.username,
-      phone: this.currentUser.phone
+      name: '',
+      username: '',
+      // name: this.currentUser.name,
+      // username: this.currentUser.username,
     })
   }
 
@@ -110,7 +113,7 @@ export class HeaderComponent implements OnInit {
       return    
     }
 
-    this.currentUser = JSON.parse( localStorage.getItem('currentUser')! )
+    // this.currentUser = JSON.parse( localStorage.getItem('currentUser')! )
   }
 
   setCurrentUser( user: User): void {
@@ -128,32 +131,32 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  getPassword(): void {
-    this.userService.getUserByEmail( this.currentUser.email )
-    .subscribe({
-      next: user => {
-        const { password } = user[0]
-        if ( password ) {
-           this.currentUserPassword = password
-        }
-      },
-      error: err => console.error(err)
-    })
-  }
+  // getPassword(): void {
+  //   this.userService.getUserByEmail( this.currentUser.email )
+  //   .subscribe({
+  //     next: user => {
+  //       const { password } = user[0]
+  //       if ( password ) {
+  //          this.currentUserPassword = password
+  //       }
+  //     },
+  //     error: err => console.error(err)
+  //   })
+  // }
 
   showEditUser(): void {
     this.modalEdit = true;
-    this.getPassword();
+    // this.getPassword();
   }
 
   confirmPass() {
-    const password = this.editFormPass.get('password')?.value
-    if( password === this.currentUserPassword ) {
-      this.checkPass = true;
-      this.wrongPass = false;
-    } else {
-      this.wrongPass = true;
-    }
+    // const password = this.editFormPass.get('password')?.value
+    // if( password === this.currentUserPassword ) {
+    //   this.checkPass = true;
+    //   this.wrongPass = false;
+    // } else {
+    //   this.wrongPass = true;
+    // }
   }
 
   savePersonalData(): void {
@@ -162,33 +165,27 @@ export class HeaderComponent implements OnInit {
     }
 
     if ( this.editForm.touched ){
-      const { id, email } = this.currentUser;
-      const userEdit: User = {
-        id,
-        name: this.editForm.get('name')?.value,
-        username: this.editForm.get('username')?.value,
-        email,
-        password: this.currentUserPassword,
-        address: {
-            street: "",
-            suite: "",
-            city: "",
-            zipcode: "",
-            geo: {
-                lat: "",
-                lng: ""
-            }
-        },
-        phone: this.editForm.get('phone')?.value,
-        website: "",
-        company: {
-            name: "",
-            catchPhrase: "",
-            bs: ""
-        }
-      }
+      // const { id, email } = this.currentUser;
+      // const userEdit: User = {
+      //   id,
+      //   name: this.editForm.get('name')?.value,
+      //   username: this.editForm.get('username')?.value,
+      //   password: this.currentUserPassword,
+      //   email,
+      //   photo: '',
+      //   birthday: '',
+      //   amountPost: 0,
+      //   admin: false,
+      //   address: {
+      //       city: "",
+      //       geo: {
+      //           lat: "",
+      //           lng: ""
+      //       }
+      //   },
+      // }
 
-      this.uploadChange( userEdit )
+      // this.uploadChange( userEdit )
     }
   }
 
@@ -198,33 +195,27 @@ export class HeaderComponent implements OnInit {
     }
 
     if ( this.editFormPass.touched ){
-      const { id, email } = this.currentUser;
-      const userEdit: User = {
-        id,
-        name: this.currentUser.name,
-        username: this.currentUser.username,
-        email,
-        password: this.editFormPass.get('newPassword')?.value,
-        address: {
-            street: "",
-            suite: "",
-            city: "",
-            zipcode: "",
-            geo: {
-                lat: "",
-                lng: ""
-            }
-        },
-        phone: this.currentUser.phone,
-        website: "",
-        company: {
-            name: "",
-            catchPhrase: "",
-            bs: ""
-        }
-      }
+      // const { id, email } = this.currentUser;
+      // const userEdit: User = {
+      //   id,
+      //   name: this.currentUser.name,
+      //   username: this.currentUser.username,
+      //   password: this.editFormPass.get('newPassword')?.value,
+      //   email,
+      //   photo: '',
+      //   birthday: '',
+      //   amountPost: 0,
+      //   admin: false,
+      //   address: {
+      //       city: "",
+      //       geo: {
+      //           lat: "",
+      //           lng: ""
+      //       }
+      //   },
+      // }
 
-      this.uploadChange( userEdit )
+      // this.uploadChange( userEdit )
     }
   }
 
@@ -268,8 +259,12 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     if ( confirm('¿Desea cerrar la sesion?') ){
-      localStorage.removeItem('currentUser');
-      this.router.navigate(['/auth/login']);
+      this.userService.logout()
+        .then(() => {
+          // localStorage.removeItem('currentUser');
+          this.router.navigate(['/auth/login']);
+        })
+        .catch( error => console.error(error) )
     } else {
       return;
     }

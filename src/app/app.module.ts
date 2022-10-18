@@ -12,6 +12,11 @@ import { registerLocaleData } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 import { SpinnerInterceptor } from './shared/interceptors/spinner.interceptor';
+import { environment } from '../environments/environment';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideStorage, getStorage } from '@angular/fire/storage';
+import { AngularFireModule } from '@angular/fire/compat';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 
 registerLocaleData( localEs );
 
@@ -25,7 +30,11 @@ registerLocaleData( localEs );
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    SharedModule
+    SharedModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
+    provideFirebaseApp(() => initializeApp(environment.firebase))
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'es-AR' },

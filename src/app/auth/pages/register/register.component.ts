@@ -4,8 +4,8 @@ import { ValidatorService } from '../../../shared/services/validator.service';
 import { Router } from '@angular/router';
 import { User } from '../../../posts/interfaces/user.interface';
 import { UserService } from '../../../shared/services/user.service';
-import { EmailValidatorService } from '../../../shared/services/email-validator.service';
-import { timer } from 'rxjs';
+import { SpinnerService } from '../../../shared/services/spinner.service';
+
 
 @Component({
   selector: 'app-register',
@@ -14,16 +14,14 @@ import { timer } from 'rxjs';
 })
 export class RegisterComponent {
 
-  success: boolean = false;
-  error: boolean = false;
   registerForm!: FormGroup;
-  timer$ = timer(1500);
+  uid!: string;
 
   constructor( 
     private fb: FormBuilder,
     private vs: ValidatorService,
     private userService: UserService,
-    private validator: EmailValidatorService,
+    private spinnerService: SpinnerService,
     private router: Router,
   ) { this.createForm(); }
 
@@ -66,7 +64,7 @@ export class RegisterComponent {
   createForm() {
     this.registerForm = this.fb.group({
       username: ['', [ Validators.required, Validators.minLength(4), Validators.pattern( this.vs.notEmpty ) ]],
-      email: ['', [ Validators.required, Validators.pattern( this.vs.emailPattern )], [ this.validator ] ],
+      email: ['', [ Validators.required, Validators.pattern( this.vs.emailPattern )] ],
       password: ['', [ Validators.required, Validators.minLength(6), Validators.pattern( this.vs.notEmpty ) ]],
       password2: ['', [ Validators.required ]]
     }, {
@@ -85,53 +83,57 @@ export class RegisterComponent {
 
   }
 
-  createRegister(): void {
+  async createRegister() {
     if(this.registerForm.invalid) {
         this.registerForm.markAllAsTouched();
       return;
     }
+    this.spinnerService.show();
 
     const { username, email, password }  = this.registerForm.value
-    const userRegister: User = {
-      name: "",
-      username,
-      email,
-      password,
+   
+    await this.userService.register( email, password )
+      .then( resp => {
+        this.uid = resp.user?.uid!
+      })
+      .catch( err => {
+        this.spinnerService.hide()
+        this.firebaseError(err.code)
+      })
+
+    const userRegister: any = {
+      name: '',
+      username: username,
+      email: email,
+      photo: '',
+      birthday: '',
+      amountPost: 0,
+      admin: false,
       address: {
-          street: "",
-          suite: "",
-          city: "",
-          zipcode: "",
+          city: '',
           geo: {
-              lat: "",
-              lng: ""
+              lat: '',
+              lng: ''
           }
       },
-      phone: "",
-      website: "",
-      company: {
-          name: "",
-          catchPhrase: "",
-          bs: ""
-      }
     }
     
-    this.userService.registerUser( userRegister )
-      .subscribe({
-        next: _ => {
-          this.success = true;
-          this.timer$.subscribe( _ => {
-            this.router.navigate(['/auth/login'])
-          });
-        },
-        error: _ => {
-          this.error = true;
-          this.timer$.subscribe( _ => {
-            this.error = false;
-            this.registerForm.reset({})
-          });
-        }
-      });
+
+    await this.userService.addUser( this.uid, userRegister )
+      .then(_ => {
+        this.router.navigate(['/auth/login'])
+        this.spinnerService.hide()
+      })
+      .catch( err => {
+        this.spinnerService.hide()
+      })
+
+  }
+
+  firebaseError( code: string ): void {
+    if(code === 'auth/email-already-in-use'){
+      this.registerForm.get('email')?.setErrors({ emailExists: true })
+    }
   }
 
 }
