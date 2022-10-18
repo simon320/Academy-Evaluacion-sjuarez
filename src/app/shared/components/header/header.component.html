@@ -1,9 +1,12 @@
 <header class="sticky top-0 z-5 flex justify-content-end p-2">
-    <div class="flex align-content-center justify-content-center h-3rem">
-        <h2 class="m-0 mr-3 mt-1 h-1rem"> {{ currentUser.username }} </h2>
-        <button pButton (click)="showEditUser()" class="p-button-text mr-3" icon="pi pi-cog"></button>
-        <button pButton (click)="logout()" class="p-button-outlined" label="Cerrar sesion"
+    <div class="flex align-content-center justify-content-between h-3rem w-full">
+        <h3 class="m-0 ml-0 mt-2 h-1rem">{{ routeUrl }}</h3>
+        <div class="flex align-content-center justify-content-end h-3rem">
+            <h2 class="m-0 mr-3 mt-1 h-1rem"> {{ currentUser.username }} </h2>
+            <button pButton (click)="showEditUser()" class="p-button-text mr-3" icon="pi pi-cog"></button>
+            <button pButton (click)="logout()" class="p-button-outlined" label="Cerrar sesion"
             icon="pi pi-power-off"></button>
+        </div>
     </div>
 </header>
 

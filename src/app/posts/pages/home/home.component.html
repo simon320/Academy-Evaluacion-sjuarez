@@ -2,8 +2,6 @@
 <app-alert></app-alert>
 
 <div class="flex-column align-items-center m-3">
-
-    <h1 class="text-center">Lista de Posts</h1>
     
     <p-table [value]="post" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" [responsive]="true"
     currentPageReportTemplate="{first} a {last} de {totalRecords} post" [rowsPerPageOptions]="[10,25,50]">

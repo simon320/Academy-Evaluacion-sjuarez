@@ -5,8 +5,7 @@
     <a routerLink="/post"><em class="pi pi-arrow-left"></em></a>
 
     <div class="flex flex-column">
-        <h4 class="m-0 mt-2 ml-2">Detalles del Post: {{ postDetails.id }} </h4>
-        <h5 class="m-0 mb-6 ml-2"> Ultimo comentario: {{ date | date: 'yyyy, MMM, dd h:mm a' }} </h5>
+        <h5 class="m-3 ml-2"> Ultimo comentario: {{ date | date: 'yyyy, MMM, dd h:mm a' }} </h5>
     </div>
     
     <h1> {{ postDetails.title | titlecase }} </h1>

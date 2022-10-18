@@ -22,7 +22,8 @@ export class HeaderComponent implements OnInit {
   wrongPass: boolean = false;
   editForm!: FormGroup;
   editFormPass!: FormGroup;
-  timer$ = timer(1500);
+  routeUrl!: string;
+  // timer$ = timer(1500);
 
   constructor( 
     private fb: FormBuilder,
@@ -35,6 +36,7 @@ export class HeaderComponent implements OnInit {
       this.getCurrentUser() 
       this.createForm()
       this.resetForm()
+      this.getRouteUrl()
   }
 
   createForm(): void {
@@ -51,7 +53,19 @@ export class HeaderComponent implements OnInit {
     }, {
       validators: [ this.vs.compareFields('newPassword', 'confirmNewPassword') ]
     })
-}
+  }
+
+  getRouteUrl() {
+    const url = this.router.url
+    const params = url.split("/")
+    if(url.includes('/post/')){
+        return this.routeUrl = `Detalles del Post: ${params[2]}`
+    }
+    if(url.includes('/post')){
+        return this.routeUrl = 'Lista de Posts'
+    }
+    return 'Home'
+  }
   
   get userErrorMsg(): string {
     const errors = this.editForm.get('username')?.errors;
