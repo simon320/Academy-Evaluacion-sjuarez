@@ -14,3 +14,14 @@ a {
     font-family: 'Caveat', cursive;
     font-size: 5rem;
 }
+
+.img__container {
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    overflow: hidden;
+    outline: #0b111b 2px solid;
+}
+.img__container img {
+    height: 100px;
+}

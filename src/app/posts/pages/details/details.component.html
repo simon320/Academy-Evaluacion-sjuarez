@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<div class="flex-column p-3">
+<div *ngIf="postDetails" class="flex-column p-3">
 
     <a routerLink="/post"><em class="pi pi-arrow-left"></em></a>
 
@@ -8,6 +8,12 @@
         <h5 class="m-3 ml-2"> Ultimo comentario: {{ date | date: 'yyyy, MMM, dd h:mm a' }} </h5>
     </div>
     
+    <div class="img__container">
+        <img [src]="postDetails.author.photoUrl" [alt]="postDetails.author.username">
+    </div>
+
+    <p> {{ postDetails.author.username }} </p>
+
     <h1> {{ postDetails.title | titlecase }} </h1>
     
     <h4> {{ postDetails.body }} </h4>

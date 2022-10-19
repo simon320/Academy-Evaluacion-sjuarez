@@ -3,22 +3,44 @@
 <app-user *ngIf="userEdit"></app-user>
 
 <div *ngIf="true" class="flex-column align-items-center m-3">
+
+    <div *ngIf="!newPost; else createPost" class="flex justify-content-center m-3">
+        <p-card class="w-16 md:w-7 p-3">
+            <ng-template pTemplate="header">
+                <h3 class="mb-0 p-3">
+                    Crea un nuevo Post!
+                </h3>
+            </ng-template>
+            <p class="mt-0 md:px-4">
+                Animate y crea un nuevo Post!
+                Seguro algo tienes para contar que a los demas pueda interesarles.
+            </p>
+            <ng-template pTemplate="footer">
+                <p-button label="Crear" (click)="showCreatePost(true)" class="ml-8 md:ml-0" icon="pi pi-plus"></p-button>
+            </ng-template>
+        </p-card>
+    </div>
+
+    <ng-template #createPost>
+        <app-create-post (closeEvent)="showCreatePost($event)"></app-create-post>
+    </ng-template>
+    
     
     <p-table [value]="post" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" [responsive]="true"
     currentPageReportTemplate="{first} a {last} de {totalRecords} post" [rowsPerPageOptions]="[10,25,50]">
 
         <ng-template pTemplate="header">
                 <tr>
-                    <th id="1">ID</th>
-                    <th id="2">Post</th>
+                    <th id="1">Usuario</th>
+                    <th id="2">Titulo</th>
                     <th id="3">Ver</th>
                 </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-post>
             <tr>
-                <td>{{post.id}}</td>
-                <td>{{post.title}}</td>
+                <td>{{ post.author.username }}</td>
+                <td>{{ post.title }}</td>
                 <td>
                     <a 
                         [routerLink]="['/post/', post.id]">

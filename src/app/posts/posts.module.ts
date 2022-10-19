@@ -9,6 +9,7 @@ import { DetailsComponent } from './pages/details/details.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { CreatePostComponent } from './components/create-post/create-post.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { SharedModule } from '../shared/shared.module';
     CommentsComponent,
     DetailsComponent,
     HomeComponent,
+    CreatePostComponent,
   ],
   imports: [
     CommonModule,

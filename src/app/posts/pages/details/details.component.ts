@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
 
 import { PostService } from '../../services/post.service';
-import { Post } from '../../interfaces/post.interface';
 
 @Component({
   selector: 'app-details',
@@ -17,12 +16,7 @@ import { Post } from '../../interfaces/post.interface';
 export class DetailsComponent implements OnInit {
 
   date!: Date;
-  postDetails: Post = {
-    id: 0,
-    userId: 0,
-    title: "",
-    body: ""
-  }
+  postDetails!: any;
 
   constructor( 
     private activatedRoute: ActivatedRoute,
@@ -40,7 +34,7 @@ export class DetailsComponent implements OnInit {
       switchMap( ({id}) => this.postService.getPostById( id ) )
     )
     .subscribe({
-      next: post => this.postDetails = post,
+      next: resp => this.postDetails = resp.data(),
       error: _ => this.router.navigate(['error'])
     });
   }

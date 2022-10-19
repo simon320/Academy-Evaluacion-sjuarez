@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 import { Post } from '../interfaces/post.interface';
 import { Comments } from '../interfaces/comments.interface';
 import { environment } from '../../../environments/environment';
+import { collectionData, Firestore, collection, setDoc, doc, getDoc, updateDoc, DocumentSnapshot, addDoc } from '@angular/fire/firestore';
+
 
 
 @Injectable({
@@ -14,14 +16,37 @@ export class PostService {
 
   private herokuPost: string = environment.herokuPost;
 
-  constructor( private http: HttpClient ) { }
+  constructor( 
+    private http: HttpClient,
+    private firestore: Firestore
+  ) { }
+
+  addPost( post: Post) {
+    const userRef = collection(this.firestore, "posts");
+    return from(addDoc( userRef, post ));
+  }
+
+  getAllPosts(): Observable<Post[]> {
+    const userRef = collection(this.firestore, 'posts');
+    return collectionData(userRef, { idField: 'id' }) as Observable<Post[]>;
+  }
+
+
+
+  getPostById( id: string ): Observable<DocumentSnapshot> {
+    const userRef = doc(this.firestore, 'posts', id);
+    return from(getDoc( userRef));
+  }
+
+  // getPostByI( id: string ): Observable<Post> {
+  //   return this.http.get<Post>(`${ this.herokuPost }/posts/${ id }`);
+  // }
+
+
+
 
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>( `${ this.herokuPost }/posts/` );
-  }
-
-  getPostById( id: string ): Observable<Post> {
-    return this.http.get<Post>(`${ this.herokuPost }/posts/${ id }`);
   }
 
   getCommets( id: string ): Observable<Comments[]> {

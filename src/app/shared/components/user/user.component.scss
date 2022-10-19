@@ -1,13 +1,3 @@
-.img__container {
-    width: 95px;
-    height: 95px;
-    border-radius: 50%;
-    overflow: hidden;
-    outline: #0b111b 2px solid;
-    img {
-        height: 100px;
-    }
-}
 
 .header__labels {
     color: rgb(138, 138, 138);
@@ -18,10 +8,6 @@
     flex-direction: column;
     align-items: flex-end;
     width: 100%;
-
-    .input__column {
-
-    }
 }
 
 .swal__confirm {

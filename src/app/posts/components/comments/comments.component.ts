@@ -1,10 +1,9 @@
 import { ActivatedRoute } from '@angular/router';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { switchMap, tap } from 'rxjs';
 
 import { Comments } from '../../interfaces/comments.interface';
-import { Post } from '../../interfaces/post.interface';
 import { PostService } from '../../services/post.service';
 import { User } from '../../interfaces/user.interface';
 import { ValidatorService } from '../../../shared/services/validator.service';
