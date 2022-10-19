@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../environments/environment';
 import { User } from '../../posts/interfaces/user.interface';
-import { Observable, Subject } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth'
-import { collectionData, Firestore, collection, addDoc, setDoc, doc, getDoc } from '@angular/fire/firestore'
+import { collectionData, Firestore, collection, setDoc, doc, getDoc, updateDoc, DocumentSnapshot } from '@angular/fire/firestore'
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class UserService {
   }
 
   login( email: string, password: string ) {
-    return this.auth.signInWithEmailAndPassword( email, password );
+    return from(this.auth.signInWithEmailAndPassword( email, password ));
   }
 
   logout() {
@@ -38,36 +38,32 @@ export class UserService {
     return setDoc( userRef, user);
   }
 
+  getAuthUser() {
+    return this.auth.authState;
+  }
+
+  getUserById( uid: string ): Observable<DocumentSnapshot>{
+    const userRef = doc(this.firestore, 'user', uid );
+    return from(getDoc(userRef));
+  }
+
+  editUser( uid: string, user: any) {
+    const userRef = doc(this.firestore, 'user', uid );
+    return from(updateDoc( userRef, user))
+  }
+
+
+
+  
   getAllUser(): Observable<User[]> {
     const userRef = collection(this.firestore, 'user');
     return collectionData(userRef, { idField: 'id' }) as Observable<User[]>;
   }
 
-  getAuthUser() {
-    return this.auth.authState;
-  }
-
-  // async getUserById( uid: string ){
-  //   const userRef = doc(this.firestore, 'user', 'L1RVCLxRAvd2UFuofQU4sHiZeWh2' );
-  //   return await getDoc(userRef);
-  // }
-
-  getUserById( uid: string ){
-    const userRef = doc(this.firestore, 'user', uid );
-    return getDoc(userRef);
-  }
-
-  // addUser( user: any) {
-  //   const userRef = collection(this.firestore, 'user');
-  //   return addDoc((userRef), user);
-  // }
-
-  // getAllUser() {
-  //   const coll = collection(this.firestore, 'user');
-  //   this.user$ = collectionData(coll);
-  // }
 
 
+
+  ////////////////////////////////////////////////////////////
   registerUser( user: User): Observable<User> {
     return this.http.post<User>( `${ this.herokuPost }/users`, user );
   }
@@ -79,9 +75,5 @@ export class UserService {
   getUserByEmail( email: string ): Observable<User[]> {
     return this.http.get<User[]>( `${ this.herokuPost }/users?email=${ email }`);
   }
-
-  // getUserById( user: User ): Observable<User> {
-  //   return this.http.put<User>( `${ this.herokuPost }/users/${ user.id }`, user);
-  // }
 
 }

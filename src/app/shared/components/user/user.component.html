@@ -1,0 +1,112 @@
+<app-header></app-header>
+
+<div class="flex-column p-2">
+    <div class="flex justify-content-end">
+        <button pButton type="button" (click)="close()" class="p-button-outlined mr-3 mt-2"
+        icon="pi pi-times"></button>
+    </div>
+    <section class="w-full -mt-5">
+        <div class="form relative md:w-8 p-6">
+            <div class="flex align-items-center h-7">
+                <div class="img__container mx-3">
+                    <img [src]="photo" alt="">
+                </div> 
+                <div class="header__labels flex flex-column">
+                    <span> {{ currentUser.rol }} </span>  
+                    <span> {{ currentUser.email }} </span>  
+                    <span> Posts creados: {{ currentUser.amountPost }} </span>  
+                </div>
+            </div>
+            <form [formGroup]="editForm" autocomplete="off" class="w-full">
+                <h2 class="text-left">Datos personales</h2>
+                
+                <div class="input__container">
+                    <div class="input__column">
+                        <!-- Nombre y apellido -->
+                        <div class="w-19rem md:col-12 m-auto field">
+                            <label class="block">Apellido y nombre</label>
+                            <div class="p-inputgroup flex relative">
+                                <input pInputText type="text" placeholder="Apellido y nombre" formControlName="name">
+                                <em *ngIf="inputCheck(editForm, 'name', 'valid')" style="color: #00ff00"
+                                    class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
+                                </em>
+                            </div>
+                        </div>
+        
+                        <!-- Nombre de usuario -->
+                        <div class="w-19rem md:col-12 m-auto field">
+                            <label class="block">Nombre de Usuario</label>
+                            <div class="p-inputgroup flex relative">
+                                <input pInputText type="text" placeholder="Nombre de Usuario" formControlName="username">
+                                <em *ngIf="inputCheck(editForm, 'username', 'valid')" style="color: #00ff00"
+                                    class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
+                                </em>
+                            </div>
+        
+                            <div class="h-1rem">
+                                <small *ngIf="inputCheck(editForm, 'username', 'invalid')" class="text-center p-error block">
+                                    {{ userErrorMsg }}
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <!-- Fecha de cumpleaños -->
+                        <div class="w-19rem md:col-12 m-auto field">
+                            <label class="block">Fecha de cumpleaños</label>
+                            <div class="p-inputgroup flex relative">
+                                <input pInputText type="date" placeholder="Fecha de cumpleaños" formControlName="birthday">
+                            </div>
+        
+                            <div class="h-1rem">
+                                <small *ngIf="inputCheck(editForm, 'username', 'invalid')" class="text-center p-error block">
+                                    {{ userErrorMsg }}
+                                </small>
+                            </div>
+                        </div>
+        
+                    </div>
+
+                    <div class="input__column">
+                        <!-- Ciudad -->
+                        <div class="w-19rem md:col-12 m-auto field">
+                            <label class="block">Ciudad</label>
+                            <div class="p-inputgroup flex relative">
+                                <input pInputText type="text" placeholder="Ciudad" formControlName="city">
+                                <em *ngIf="inputCheck(editForm, 'city', 'valid')" style="color: #00ff00"
+                                    class="pi pi-check green-400 absolute right-0 align-self-center mr-2 z-5 scalein fadein">
+                                </em>
+                            </div>
+        
+                            <div class="h-1rem">
+                                <small *ngIf="inputCheck(editForm, 'city', 'invalid')" class="text-center p-error block">
+                                    c
+                                </small>
+                            </div>
+                        </div>
+        
+                        <!-- Foto -->
+                        <div class="w-19rem md:col-12 m-auto field">
+                            <label class="block">Url de la foto</label>
+                            <div class="p-inputgroup flex relative">
+                                <input pInputText type="text" placeholder="Url de la foto" formControlName="photoUrl">
+                            </div>
+                        </div>
+
+                        <div class="p-inputgroup flex align-items-center justify-content-end mt-3">
+                            <button pButton type="button" (click)="saveEditData()" label="Guardar datos"></button>
+                        </div>
+                    </div>
+    
+                </div>
+            </form>
+    
+        </div>
+    </section>
+    
+    <div *ngIf="success" class="swal__confirm">
+        <div class="label__container scalein fadein">
+            <h3>Cambios guardados con exito!</h3>
+        </div>
+    </div>
+
+</div>

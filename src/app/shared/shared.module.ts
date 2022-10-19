@@ -6,7 +6,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { AlertComponent } from './components/alert/alert.component';
-
+import { UserComponent } from './components/user/user.component';
 
 
 @NgModule({
@@ -14,7 +14,8 @@ import { AlertComponent } from './components/alert/alert.component';
     AlertComponent,
     ErrorPageComponent,
     HeaderComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    UserComponent,
   ],
   imports: [
     CommonModule,
@@ -26,7 +27,8 @@ import { AlertComponent } from './components/alert/alert.component';
     ErrorPageComponent,
     HeaderComponent,
     PrimeNgModule,
-    SpinnerComponent
+    SpinnerComponent,
+    UserComponent
   ]
 })
 export class SharedModule { }

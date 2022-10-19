@@ -2,12 +2,12 @@ export interface User {
     id?:       number;
     name:     string;
     username: string;
-    photo: string;
+    photoUrl: string;
     email:    string;
     birthday: string;
     password?: string;
     address:  Address;
-    admin: boolean;
+    rol: string;
     amountPost: number;
 }
 

@@ -101,14 +101,14 @@ export class RegisterComponent {
         this.firebaseError(err.code)
       })
 
-    const userRegister: any = {
+    const userRegister: User = {
       name: '',
       username: username,
       email: email,
-      photo: '',
+      photoUrl: '',
       birthday: '',
       amountPost: 0,
-      admin: false,
+      rol: 'Usuario',
       address: {
           city: '',
           geo: {
@@ -120,11 +120,11 @@ export class RegisterComponent {
     
 
     await this.userService.addUser( this.uid, userRegister )
-      .then(_ => {
+      .then( _ => {
         this.router.navigate(['/auth/login'])
         this.spinnerService.hide()
       })
-      .catch( err => {
+      .catch( _ => {
         this.spinnerService.hide()
       })
 

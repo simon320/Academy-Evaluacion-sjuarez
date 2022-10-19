@@ -9,5 +9,5 @@ export const environment = {
     messagingSenderId: '239727561339',
   },
   production: true,
-  herokuPost: 'https://simon-juarez-endpoint.herokuapp.com'
+  // herokuPost: 'https://simon-juarez-endpoint.herokuapp.com'
 };

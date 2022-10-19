@@ -16,7 +16,7 @@ import { SharedModule } from '../shared/shared.module';
     AlternCasePipe,
     CommentsComponent,
     DetailsComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     CommonModule,
