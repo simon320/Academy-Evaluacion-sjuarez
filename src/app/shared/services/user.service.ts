@@ -34,7 +34,7 @@ export class UserService {
   }
 
   addUser( uid: string, user: any) {
-    const userRef = doc(this.firestore, "user", uid);
+    const userRef = doc(this.firestore, "users", uid);
     return setDoc( userRef, user);
   }
 
@@ -43,12 +43,12 @@ export class UserService {
   }
 
   getUserById( uid: string ): Observable<DocumentSnapshot>{
-    const userRef = doc(this.firestore, 'user', uid );
+    const userRef = doc(this.firestore, 'users', uid );
     return from(getDoc(userRef));
   }
 
   editUser( uid: string, user: any) {
-    const userRef = doc(this.firestore, 'user', uid );
+    const userRef = doc(this.firestore, 'users', uid );
     return from(updateDoc( userRef, user))
   }
 
@@ -56,7 +56,7 @@ export class UserService {
 
   
   getAllUser(): Observable<User[]> {
-    const userRef = collection(this.firestore, 'user');
+    const userRef = collection(this.firestore, 'users');
     return collectionData(userRef, { idField: 'id' }) as Observable<User[]>;
   }
 

@@ -13,11 +13,72 @@
     </div>
 
     <p> {{ postDetails.author.username }} </p>
-
+    <h5 class="m-3 ml-2"> {{ postDetails.date }} </h5>
     <h1> {{ postDetails.title | titlecase }} </h1>
     
     <h4> {{ postDetails.body }} </h4>
     
+
+    <div *ngIf="postDetails.author.id === currentUser.id" class="flex justify-content-end pr-5">
+        <button (click)="openEditPost()" pButton pRipple type="button"icon="pi pi-pencil"
+            class="p-button-rounded p-button-text"></button>
+        <button (click)="deletePost()" pButton pRipple type="button" icon="pi pi-trash"
+            class="p-button-rounded p-button-text"></button>
+        <button *ngIf="!postDetails.hide" (click)="hidePost(true)" pButton pRipple type="button" icon="pi pi-eye-slash"
+            class="p-button-rounded p-button-text"></button>
+        <button *ngIf="postDetails.hide" (click)="hidePost(false)" pButton pRipple type="button" icon="pi pi-eye"
+            class="p-button-rounded p-button-text"></button>
+    </div>
+
+    <div *ngIf="showEditPost">
+        <p-panel header="Editar Post">
+            <section class="scalein fadein">
+                <form [formGroup]="postForm">
+
+                    <!-- Titulo del comentario -->
+                    <div class="col-12 md:col-6 m-auto field">
+                        <div class="p-inputgroup flex relative">
+                            <input
+                                pInputText 
+                                type="text" 
+                                placeholder="Titulo del Post"
+                                formControlName="title"> 
+                        </div>
+                        <div class="h-1rem">
+                            <small *ngIf="inputInvalid('title')" class="text-center p-error block">
+                                {{ titleErrorMsg }}
+                            </small>        
+                        </div>    
+                    </div>
+
+                    <!-- Cuerpo del comentario -->
+                    <div class="col-12 md:col-6 m-auto field">
+                        <div class="p-inputgroup flex relative">
+                            <textarea formControlName="body" [rows]="5" [cols]="30" pInputTextarea [autoResize]="true"
+                                placeholder="Escribe el contenido del Post aquí..."></textarea>
+                        </div>
+                        <div class="h-1rem">
+                            <small *ngIf="inputInvalid('body')" class="text-center p-error block">
+                                {{ bodyErrorMsg }}
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Boton submit -->
+                    <div class="flex justify-content-center">
+                        <button 
+                            pButton 
+                            type="button" 
+                            label="Editar Post"
+                            class="ml-5"
+                            (click)="editPost()">
+                        </button>                     
+                    </div>
+
+                </form>
+            </section>
+        </p-panel>
+    </div>
     <app-comments (dateEvent)="showDate($event)">
     </app-comments>
 

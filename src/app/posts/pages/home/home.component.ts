@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Post } from '../../interfaces/post.interface';
 import { PostService } from '../../services/post.service';
 import { SpinnerService } from '../../../shared/services/spinner.service';
+import { User } from '../../interfaces/user.interface';
 
 
 @Component({
@@ -16,7 +17,9 @@ import { SpinnerService } from '../../../shared/services/spinner.service';
 })
 export class HomeComponent implements OnInit {
 
+  currentUser!: User;
   post: Post[] = []
+  showPost: Post[] = []
   userEdit: boolean = false;
   newPost: boolean = false;
 
@@ -27,6 +30,14 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllPosts()
+    this.getCurrentUser()
+  }
+
+  getCurrentUser(): void {
+    if(!localStorage.getItem('currentUser')){
+      return    
+    }
+    this.currentUser = JSON.parse( localStorage.getItem('currentUser')! )
   }
 
   showCreatePost( boolean: boolean ) {
@@ -39,7 +50,7 @@ export class HomeComponent implements OnInit {
     .subscribe({
       next: post => {
         this.post = post
-        console.log(this.post);
+        this.setShowPost()
         this.spinnerService.hide()
       },
       error: err => {
@@ -47,6 +58,14 @@ export class HomeComponent implements OnInit {
         console.error(err)
       }
     });
+  }
+
+  setShowPost() {
+    if(this.currentUser.rol === 'admin') {
+      this.showPost = this.post
+    }
+
+    this.showPost = this.post.filter( post => (post.author?.id === this.currentUser.id || !post.hide))
   }
 
 }

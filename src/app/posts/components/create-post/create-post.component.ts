@@ -37,7 +37,7 @@ export class CreatePostComponent implements OnInit {
       this.getCurrentUser();
     }
   
-    get nameErrorMsg(): string {
+    get titleErrorMsg(): string {
       const errors = this.postForm.get('title')?.errors;
       if( errors?.['required'] ) {
         return 'El nombre del comentario es obligatorio.'
@@ -109,10 +109,13 @@ export class CreatePostComponent implements OnInit {
         title: this.postForm.get('title')?.value,
         body: this.postForm.get('body')?.value,
         author: {
+          id: this.currentUser.id,
           username: this.currentUser.username,
           photoUrl: this.currentUser.photoUrl
         },
-        date: this.date,        
+        date: this.date,
+        comments: null,
+        hide: false    
       }
 
       this.postService.addPost(newPost)

@@ -102,6 +102,7 @@ export class RegisterComponent {
       })
 
     const userRegister: User = {
+      id: this.uid,
       name: '',
       username: username,
       email: email,

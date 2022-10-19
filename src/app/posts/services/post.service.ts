@@ -5,7 +5,7 @@ import { Observable, from } from 'rxjs';
 import { Post } from '../interfaces/post.interface';
 import { Comments } from '../interfaces/comments.interface';
 import { environment } from '../../../environments/environment';
-import { collectionData, Firestore, collection, setDoc, doc, getDoc, updateDoc, DocumentSnapshot, addDoc } from '@angular/fire/firestore';
+import { collectionData, Firestore, collection, setDoc, doc, getDoc, updateDoc, DocumentSnapshot, addDoc, deleteDoc } from '@angular/fire/firestore';
 
 
 
@@ -22,25 +22,31 @@ export class PostService {
   ) { }
 
   addPost( post: Post) {
-    const userRef = collection(this.firestore, "posts");
-    return from(addDoc( userRef, post ));
+    const postRef = collection(this.firestore, "posts");
+    return from(addDoc( postRef, post ));
   }
 
   getAllPosts(): Observable<Post[]> {
-    const userRef = collection(this.firestore, 'posts');
-    return collectionData(userRef, { idField: 'id' }) as Observable<Post[]>;
+    const postRef = collection(this.firestore, 'posts');
+    return collectionData( postRef, { idField: 'id' }) as Observable<Post[]>;
   }
 
 
 
   getPostById( id: string ): Observable<DocumentSnapshot> {
-    const userRef = doc(this.firestore, 'posts', id);
-    return from(getDoc( userRef));
+    const postRef = doc(this.firestore, 'posts', id);
+    return from(getDoc( postRef ));
   }
 
-  // getPostByI( id: string ): Observable<Post> {
-  //   return this.http.get<Post>(`${ this.herokuPost }/posts/${ id }`);
-  // }
+  editPost( uid: string, post: any) {
+    const postRef = doc(this.firestore, 'posts', uid );
+    return from(updateDoc( postRef, post))
+  }
+
+  deletePost( uid: string ) {
+    const postRef = doc(this.firestore, 'posts', uid );
+    return from(deleteDoc( postRef ))
+  }
 
 
 

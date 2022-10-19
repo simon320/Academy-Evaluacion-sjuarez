@@ -4,8 +4,8 @@
 </div>
 
 <div class="mb-5">
-    <p-panel header="Nuevo Post">
 
+    <p-panel header="Nuevo Post">
         <section class="scalein fadein">
             <form (ngSubmit)="savePost()" [formGroup]="postForm">
 
@@ -20,7 +20,7 @@
                     </div>
                     <div class="h-1rem">
                         <small *ngIf="inputInvalid('title')" class="text-center p-error block">
-                            {{ nameErrorMsg }}
+                            {{ titleErrorMsg }}
                         </small>        
                     </div>    
                 </div>
@@ -61,4 +61,5 @@
             </form>
         </section>
     </p-panel>
+
 </div>

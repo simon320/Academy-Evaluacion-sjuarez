@@ -108,6 +108,7 @@ export class UserComponent implements OnInit {
       if ( this.editForm.touched ){
         this.spinnerService.show()
         const userEdit: User = {
+          id: this.currentUser.id,
           name: this.editForm.get('name')?.value,
           username: this.editForm.get('username')?.value,
           email: this.currentUser.email,
