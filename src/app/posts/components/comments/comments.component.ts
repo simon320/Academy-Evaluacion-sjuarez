@@ -2,7 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Comments } from '../../interfaces/comments.interface';
+import { Comments, Like } from '../../interfaces/comments.interface';
 import { PostService } from '../../services/post.service';
 import { User } from '../../interfaces/user.interface';
 import { ValidatorService } from '../../../shared/services/validator.service';
@@ -212,6 +212,32 @@ export class CommentsComponent implements OnInit {
         this.spinnerService.hide()
       }
     })
+  }
+
+
+  sendLike(commentid: string, userid: string, username: string, like: Like[]) {
+    this.spinnerService.show()
+    const newLike = {
+          id: userid,
+          username
+        }
+    
+    like.push(newLike)
+    const sendLike = { like }
+    this.commentService.editComment( commentid, sendLike )
+    .subscribe({
+      next: _ => {
+        this.spinnerService.hide()
+      },
+      error: _ => {
+        this.spinnerService.hide()
+      }
+    })
+  }
+
+  haveUserLike( like: Like[] ): boolean {
+    const userLike = like.filter( like => like.id === this.currentUser.id )
+    return userLike.length !== 0
   }
 
 }

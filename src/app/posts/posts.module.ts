@@ -10,11 +10,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { CreatePostComponent } from './components/create-post/create-post.component';
 import { DatePipe } from './pipes/date.pipe';
+import { LikePipe } from './pipes/like.pipe';
 
 
 @NgModule({
   declarations: [
     DatePipe,
+    LikePipe,
     CommentsComponent,
     DetailsComponent,
     HomeComponent,

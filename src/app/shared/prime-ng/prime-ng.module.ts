@@ -10,6 +10,8 @@ import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+
 
 
 @NgModule({
@@ -23,7 +25,8 @@ import { TableModule } from 'primeng/table';
     PanelModule,
     PasswordModule,
     ProgressSpinnerModule,
-    TableModule
+    TableModule,
+    TooltipModule
   ]
 })
 export class PrimeNgModule { }

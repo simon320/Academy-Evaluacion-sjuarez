@@ -4,20 +4,33 @@
     <div *ngIf="currentUser.rol === 'admin'; else user">
         <p-panel
             *ngFor="let comment of commentsForAdmin" 
-            header="{{ comment.title | titlecase }} {{ comment.date }}"
+            header="{{ comment.title | titlecase }}"
             [toggleable]="true"
             [collapsed]="true">
-    
-            <div>
+
+            <div class="flex justify-content-between w-full">
                 <p>{{ comment.date | dateBySeconds | date: 'YY-MM-dd h:mm a' }}</p>
-                <p>{{ comment.body }}</p>
-            </div>
-            <div class="flex flex-column justify-content-end pr-5">
-                <div class="img__container flex justify-content-end pr-5">
-                    <img emptyImg [valueImg]="comment.author.photoUrl" [src]="comment.author.photoUrl" [alt]="comment.author.username">
+                <div class="flex align-content-center">
+                    <button *ngIf="!haveUserLike(comment.like); else alreadyLike" (click)="sendLike(comment.id!, currentUser.id!, currentUser.username, comment.like)" pButton pRipple type="button"
+                    icon="pi pi-thumbs-up" class="p-button-text"></button>
+                    <ng-template #alreadyLike>
+                        <button pButton [disabled]="true" icon="pi pi-thumbs-up" class="p-button-text"></button>
+                    </ng-template>
+                    <p class="cursor-pointer" pTooltip="{{ comment.like | likePipe }}" tooltipPosition="left">{{comment.like.length}}</p>
                 </div>
-                <p class="flex justify-content-end pr-5">{{ comment.author.username | titlecase }}</p>
             </div>
+            <div class="flex justify-content-between w-full">
+                <p>{{ comment.body }}</p>
+                <div class="flex align-content-center justify-content-center pr-5">
+                    <p class="mr-4">{{ comment.author.username | titlecase }}</p>
+                    <div class="img__container-comment">
+                        <img emptyImg [valueImg]="comment.author.photoUrl" [src]="comment.author.photoUrl" [alt]="comment.author.username">
+                    </div>
+                </div>
+            </div>
+
+
+
             <div class="flex justify-content-end pr-5">
                 <button *ngIf="comment.author.id === currentUser.id" (click)="openEditComment(comment.id!, comment.title, comment.body)" pButton pRipple type="button"
                     icon="pi pi-pencil" class="p-button-text"></button>
@@ -39,12 +52,26 @@
             [toggleable]="true"
             [collapsed]="true">
 
-            <p>{{ comment.date | dateBySeconds | date: 'YY-MM-dd h:mm a' }}</p>
-            <p>{{ comment.body }}</p>
-            <div class="img__container">
-                <img emptyImg [valueImg]="comment.author.photoUrl" [src]="comment.author.photoUrl" [alt]="comment.author.username" class="flex justify-content-end pr-5">
+            <div class="flex justify-content-between w-full">
+                <p>{{ comment.date | dateBySeconds | date: 'YY-MM-dd h:mm a' }}</p>
+                <div class="flex align-content-center">
+                    <button *ngIf="!haveUserLike(comment.like); else alreadyLike" (click)="sendLike(comment.id!, currentUser.id!, currentUser.username, comment.like)" pButton pRipple type="button"
+                    icon="pi pi-thumbs-up" class="p-button-text"></button>
+                    <ng-template #alreadyLike>
+                        <button pButton [disabled]="true" icon="pi pi-thumbs-up" class="p-button-text"></button>
+                    </ng-template>
+                    <p class="cursor-pointer" pTooltip="{{ comment.like | likePipe }}" tooltipPosition="left">{{comment.like.length}}</p>
+                </div>
             </div>
-            <p class="flex justify-content-end pr-5">{{ comment.author.username | titlecase }}</p>
+            <div class="flex justify-content-between w-full">
+                <p>{{ comment.body }}</p>
+                <div class="flex align-content-center justify-content-center pr-5">
+                    <p class="mr-4">{{ comment.author.username | titlecase }}</p>
+                    <div class="img__container-comment">
+                        <img emptyImg [valueImg]="comment.author.photoUrl" [src]="comment.author.photoUrl" [alt]="comment.author.username">
+                    </div>
+                </div>
+            </div>
             <div *ngIf="comment.author.id === currentUser.id" class="flex justify-content-end pr-5">
                 <button (click)="openEditComment(comment.id!, comment.title, comment.body)" pButton pRipple type="button"
                     icon="pi pi-pencil" class="p-button-text"></button>
