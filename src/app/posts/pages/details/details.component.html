@@ -4,30 +4,34 @@
 
     <a routerLink="/post"><em class="pi pi-arrow-left"></em></a>
 
-    <div class="flex flex-column">
-        <h5 class="m-3 ml-2"> Ultimo comentario: {{ date | date: 'yyyy, MMM, dd h:mm a' }} </h5>
-    </div>
     
     <div class="img__container">
-        <img [src]="postDetails.author.photoUrl" [alt]="postDetails.author.username">
+        <img emptyImg [valueImg]="postDetails.author!.photoUrl" [src]="postDetails.author!.photoUrl" [alt]="postDetails.author!.username">
     </div>
-
-    <p> {{ postDetails.author.username }} </p>
-    <h5 class="m-3 ml-2"> {{ postDetails.date }} </h5>
-    <h1> {{ postDetails.title | titlecase }} </h1>
+    
+    <p> {{ postDetails.author!.username }} </p>
+    <h5 class="mb-0">Publicacion: <span class="text-primary">{{ postDetails.date | dateBySeconds | date: 'YY-MM-dd h:mm a' }} </span></h5>
+    <h5 *ngIf="lastComment" > Ultimo comentario: <span class="text-primary">{{ lastComment.date | dateBySeconds | date: 'YY-MM-dd h:mm a' }}</span></h5>
+    <h1 class="mt-0"> {{ postDetails.title | titlecase }} </h1>
     
     <h4> {{ postDetails.body }} </h4>
     
 
-    <div *ngIf="postDetails.author.id === currentUser.id" class="flex justify-content-end pr-5">
-        <button (click)="openEditPost()" pButton pRipple type="button"icon="pi pi-pencil"
+    <div *ngIf="postDetails.author!.id === currentUser.id || currentUser.rol === 'admin'" class="flex justify-content-end pr-5">
+        <button *ngIf="postDetails.author!.id === currentUser.id" (click)="openEditPost()" pButton pRipple type="button"icon="pi pi-pencil"
             class="p-button-rounded p-button-text"></button>
         <button (click)="deletePost()" pButton pRipple type="button" icon="pi pi-trash"
             class="p-button-rounded p-button-text"></button>
-        <button *ngIf="!postDetails.hide" (click)="hidePost(true)" pButton pRipple type="button" icon="pi pi-eye-slash"
+        <button *ngIf="!postDetails.hide" (click)="hidePost(true)" pButton pRipple type="button" icon="pi pi-eye"
             class="p-button-rounded p-button-text"></button>
-        <button *ngIf="postDetails.hide" (click)="hidePost(false)" pButton pRipple type="button" icon="pi pi-eye"
+        <button *ngIf="postDetails.hide" (click)="hidePost(false)" pButton pRipple type="button" icon="pi pi-eye-slash"
             class="p-button-rounded p-button-text"></button>
+        <div>
+            <button *ngIf="!postDetails.blockComments" (click)="blockComments(true)" pButton pRipple type="button" icon="pi pi-lock-open"
+            class="p-button-text"></button>
+            <button *ngIf="postDetails.blockComments" (click)="blockComments(false)" pButton pRipple type="button" icon="pi pi-lock" 
+            class="p-button-text"></button>
+        </div>
     </div>
 
     <div *ngIf="showEditPost">
@@ -79,7 +83,11 @@
             </section>
         </p-panel>
     </div>
-    <app-comments (dateEvent)="showDate($event)">
+    <app-comments 
+        [commentsForAdmin]="commentsForAdmin"
+        [commentsForUser]="commentsForUser" 
+        [showCommentForm]="showCommentForm"
+        [postId]="postId">
     </app-comments>
 
 </div>

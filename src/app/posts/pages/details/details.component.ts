@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, tap } from 'rxjs';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Subscription, switchMap, tap, map, filter, from } from 'rxjs';
 
 import { PostService } from '../../services/post.service';
 import { User } from '../../interfaces/user.interface';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ValidatorService } from '../../../shared/services/validator.service';
 import { SpinnerService } from '../../../shared/services/spinner.service';
+import { Comments } from '../../interfaces/comments.interface';
+import { CommentService } from '../../services/comment.service';
+import { Post } from '../../interfaces/post.interface';
+
 
 @Component({
   selector: 'app-details',
@@ -17,27 +21,41 @@ import { SpinnerService } from '../../../shared/services/spinner.service';
     }
   `]
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnDestroy{
+
+  private subscription!: Subscription;
 
   date!: Date;
-  postDetails!: any;
+  lastComment!: Comments;
+  postDetails!: Post;
   currentUser!: User;
   postForm!: FormGroup;
   showEditPost: boolean = false;
   postId!: string;
+  comments!: Comments[];
+  commentsForAdmin: Comments[] = []
+  commentsForUser: Comments[] = []
+  showCommentForm: boolean = true;
+  
 
   constructor( 
     private activatedRoute: ActivatedRoute,
     private postService: PostService,
+    private commentService: CommentService,
     private spinnerService: SpinnerService,
     private fb: FormBuilder,
     private vs: ValidatorService,
     private router: Router
-    ) { this.createForm() }
+  ) { this.createForm() }
 
   ngOnInit(): void {
     this.getPostById();
     this.getCurrentUser();
+    this.getComments();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   getCurrentUser(): void {
@@ -49,19 +67,36 @@ export class DetailsComponent implements OnInit {
   }
 
   getPostById(): void {
-    this.activatedRoute.params
-    .pipe(
-      tap( ({id}) => this.postId = id ),
-      switchMap( ({id}) => this.postService.getPostById( id ))
-    )
-    .subscribe({
-      next: resp => this.postDetails = resp.data(),
-      error: _ => this.router.navigate(['error'])
-    });
+    this.subscription = this.activatedRoute.params
+      .pipe(
+        tap( ({id}) => this.postId = id ),
+        switchMap( ({id}) => this.postService.getPostById( id ))
+      )
+      .subscribe({
+        next: resp => {
+          this.postDetails = resp.data()
+          this.date = new Date(this.postDetails.date.seconds*1000)
+          this.showCommentForm = !this.postDetails.blockComments
+        },
+        error: _ => this.router.navigate(['error'])
+      });
   }
 
-  showDate( date: Date): void {
-    this.date = date;
+  getComments(): void {
+    this.spinnerService.show()
+    this.commentService.getAllComments()
+      .subscribe({
+        next: comments => {
+          this.comments = comments
+          this.getCommentPost()
+          this.getLastComment()
+          this.spinnerService.hide()
+        },
+        error: err => {
+          this.spinnerService.hide()
+          console.error(err)
+        }
+      });
   }
 
   get titleErrorMsg(): string {
@@ -88,7 +123,7 @@ export class DetailsComponent implements OnInit {
     return '';
   }
 
-  createForm(){
+  createForm(): void{
     this.postForm = this.fb.group({
       title: ['', [ Validators.required, Validators.maxLength(100) ]],
       body: ['', [ Validators.required, Validators.maxLength(500)]],
@@ -113,7 +148,7 @@ export class DetailsComponent implements OnInit {
   refreshPost() {
     this.postService.getPostById( this.postId )
       .subscribe({
-        next: resp => this.postDetails = resp.data(),
+        next: resp => this.postDetails = resp['data'](),
         error: err => console.error(err)
       })
   }
@@ -188,7 +223,7 @@ export class DetailsComponent implements OnInit {
     }
   }
 
-  getPost( visiblePost: any ) {
+  getPost( visiblePost: object ): void {
     this.postService.editPost( this.postId, visiblePost )
     .subscribe({
       next: _ => {
@@ -199,6 +234,70 @@ export class DetailsComponent implements OnInit {
         this.spinnerService.hide()
       }
     })
+  }
+
+  getCommentPost() {
+    this.commentsForAdmin = this.comments.filter( comment => comment.postId === this.postId )
+    this.commentsForAdmin.sort((a, b) => a.date - b.date)
+    
+    let arrayComments: any = [];
+    from(this.commentsForAdmin)
+      .pipe(
+        filter( comment => comment.hide === false),
+      ).subscribe({
+          next: comment => {
+            arrayComments.push(comment)
+          }
+      })
+
+    this.commentsForUser = arrayComments.reduce( (acc: any, item: any) => {
+      if(!acc.includes(item)){
+        acc.push(item);
+      }
+      return acc;
+    }, [])
+
+  }
+  
+  getLastComment(): void {
+    if(this.commentsForAdmin.length === 0){
+      return;
+    }
+
+    this.orderList()
+  
+    const lastIndex = this.commentsForAdmin.length - 1;
+    this.lastComment = this.commentsForAdmin[lastIndex];
+  }
+
+  orderList() {
+    return this.commentsForAdmin.sort((a, b) => a.date.seconds - b.date.seconds);
+  }
+
+  blockComments( hide: boolean ): void {
+    if(hide) {
+      if( !confirm('¿Desea impedir que se agreguen nuevos comentarios?') ){
+        return;
+      }
+      
+      this.spinnerService.show()
+      const blockComments = {
+        blockComments: true
+      }
+      this.getPost( blockComments )
+      this.showCommentForm = false;
+    } else {
+      if( !confirm('¿Desea permitir que se agreguen nuevos comentarios?') ){
+        return;
+      }
+      
+      this.spinnerService.show()
+      const blockComments = {
+        blockComments: false
+      }
+      this.getPost( blockComments )
+      this.showCommentForm = true;
+    }
   }
 
 }

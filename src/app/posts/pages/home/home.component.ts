@@ -60,12 +60,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  setShowPost() {
+  setShowPost(): Post[] {
     if(this.currentUser.rol === 'admin') {
       this.showPost = this.post
+      return this.showPost
     }
 
     this.showPost = this.post.filter( post => (post.author?.id === this.currentUser.id || !post.hide))
+    return this.showPost
   }
-
 }

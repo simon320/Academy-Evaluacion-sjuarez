@@ -114,8 +114,9 @@ export class CreatePostComponent implements OnInit {
           photoUrl: this.currentUser.photoUrl
         },
         date: this.date,
-        comments: null,
-        hide: false    
+        comments: [],
+        hide: false,
+        blockComments: false   
       }
 
       this.postService.addPost(newPost)

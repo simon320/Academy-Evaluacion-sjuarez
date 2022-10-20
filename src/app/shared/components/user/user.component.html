@@ -9,7 +9,7 @@
         <div class="form relative md:w-8 p-6">
             <div class="flex align-items-center h-7">
                 <div class="img__container mx-3">
-                    <img [src]="photo" alt="">
+                    <img emptyImg [valueImg]="currentUser.photoUrl" [src]="currentUser.photoUrl" alt="">
                 </div> 
                 <div class="header__labels flex flex-column">
                     <span> {{ currentUser.rol }} </span>  

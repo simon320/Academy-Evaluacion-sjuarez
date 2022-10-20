@@ -19,8 +19,6 @@ export class UserComponent implements OnInit {
     error: boolean = false;
     editForm!: FormGroup;
     routeUrl!: string;
-    photoDefault: string = "../../../../assets/profile.jpg"
-    photo!: string;
     timer$ = timer(1500);
 
   
@@ -37,7 +35,6 @@ export class UserComponent implements OnInit {
         this.createForm()
         this.resetForm()
         this.uid = localStorage.getItem('uid')!
-        this.setPhoto();
     }
   
     createForm(): void {
@@ -71,14 +68,6 @@ export class UserComponent implements OnInit {
         photoUrl: this.currentUser.photoUrl,
       })
       this.editForm.untouched;
-    }
-
-    setPhoto() {
-      if(this.currentUser.photoUrl.length === 0) {
-        this.photo = "../../../../assets/profile.jpg"
-      } else {
-        this.photo = this.currentUser.photoUrl
-      }
     }
   
     getCurrentUser(): void {

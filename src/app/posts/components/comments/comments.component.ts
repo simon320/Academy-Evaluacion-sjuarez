@@ -1,12 +1,13 @@
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { switchMap, tap } from 'rxjs';
 
 import { Comments } from '../../interfaces/comments.interface';
 import { PostService } from '../../services/post.service';
 import { User } from '../../interfaces/user.interface';
 import { ValidatorService } from '../../../shared/services/validator.service';
+import { CommentService } from '../../services/comment.service';
+import { SpinnerService } from '../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-comments',
@@ -19,31 +20,33 @@ import { ValidatorService } from '../../../shared/services/validator.service';
 })
 export class CommentsComponent implements OnInit {
   
+  @Input() commentsForAdmin!: Comments[];
+  @Input() commentsForUser!: Comments[];
+  @Input() showCommentForm!: boolean;
+  @Input() postId!: string;
   @Output() dateEvent: EventEmitter<Date> = new EventEmitter();
   date: Date = new Date();
   comments: Comments[] = [];
   validationToggle: boolean = false;
   labelButton: string = "Cambiar a Mayuscula";
   currentUser!: User;
-  postId!: number;
-  commentId!: number;
+  commentId!: string;
   showBtnEdit: boolean = false;
   commentForm!: FormGroup;
 
   constructor( 
-    private postService: PostService,
-    private activatedRoute: ActivatedRoute,
+    private commentService: CommentService,
+    private spinnerService: SpinnerService,
     private fb: FormBuilder,
     private vs: ValidatorService
   ) { this.createForm() }
 
   ngOnInit(): void {
-    this.getComments();
     this.getCurrentUser();
   }
 
-  get nameErrorMsg(): string {
-    const errors = this.commentForm.get('name')?.errors;
+  get titleErrorMsg(): string {
+    const errors = this.commentForm.get('title')?.errors;
     if( errors?.['required'] ) {
       return 'El nombre del comentario es obligatorio.'
     } else if( errors?.['empty'] ) {
@@ -66,7 +69,7 @@ export class CommentsComponent implements OnInit {
 
   createForm(){
     this.commentForm = this.fb.group({
-      name: ['', [ Validators.required ]],
+      title: ['', [ Validators.required ]],
       body: ['', [ Validators.required, Validators.maxLength(200)]],
     }, {
       validators: [ this.vs.empty('name'), this.vs.empty('body')]
@@ -82,33 +85,7 @@ export class CommentsComponent implements OnInit {
     if(!localStorage.getItem('currentUser')){
       return    
     }
-
     this.currentUser = JSON.parse( localStorage.getItem('currentUser')! )
-  }
-
-  getComments(): void {
-    this.activatedRoute.params
-    .pipe(
-      tap( ({ id }) => this.postId = id ),
-      switchMap( ({ id }) => this.postService.getCommets( id ) )
-    )
-    .subscribe({
-      next: comment => this.comments = comment,
-      error: err => console.error(err)
-    });
-  }
-
-  emitDate(): void {
-    this.dateEvent.emit(this.date)
-  }
-
-  toggleCase(): void {
-    this.validationToggle = !this.validationToggle;
-    if (this.labelButton === "Cambiar a Mayuscula" ){
-      this.labelButton = "Cambiar a Minuscula";
-    } else {
-      this.labelButton = "Cambiar a Mayuscula"
-    }
   }
 
   saveComment(): void{
@@ -117,28 +94,38 @@ export class CommentsComponent implements OnInit {
       return;
     }
 
+    this.spinnerService.show();
     const newComment: Comments = {
       postId: this.postId,
-      name: this.commentForm.get('name')?.value,
-      email: this.currentUser.email,
+      title: this.commentForm.get('title')?.value,
       body: this.commentForm.get('body')?.value,
+      date: this.date,
+      like: [],
+      hide: false,
+      author: {
+        id: this.currentUser.id,
+        username: this.currentUser.username,
+        photoUrl: this.currentUser.photoUrl,
+      }
     }
-
-    this.postService.addCommets( newComment )
+    
+    this.commentService.addComment( newComment )
       .subscribe({
         next: _ => {
           this.commentForm.reset({});
-          this.emitDate();
-          this.getComments();
+          this.spinnerService.hide();
         },
-        error: err => console.error(err)
+        error: err => {
+          console.error(err)
+          this.spinnerService.hide();
+        }
       })
   }
 
-  openEditComment( id: number, name: string, body: string ): void {
+  openEditComment( id: string, title: string, body: string ): void {
     this.commentId = id;
     this.commentForm.reset({
-      name: name,
+      title: title,
       body: body,
     })
     this.showBtnEdit = true;
@@ -150,36 +137,81 @@ export class CommentsComponent implements OnInit {
       return;
     }
 
-    const editComment: Comments = {
-      postId: this.postId,
-      id: this.commentId,
-      name: this.commentForm.get('name')?.value,
-      email: this.currentUser.email,
+    this.spinnerService.show();
+    const editComment = {
+      title: this.commentForm.get('title')?.value,
       body: this.commentForm.get('body')?.value,
+      date: this.date
     }
 
-    this.postService.editCommets( editComment )
+    this.commentService.editComment( this.commentId, editComment )
       .subscribe({
         next: _ => {
           this.commentForm.reset({});
-          this.emitDate();
-          this.getComments();
+          this.spinnerService.hide();
         },
-        error: err => console.error(err)
+        error: err => {
+          this.spinnerService.hide();
+          console.error(err)
+        }
       })
   }
 
-  deleteComment( id: number): void {
+  deleteComment( id: string): void {
     if( !confirm('¿Desea eliminar el comentario?') ){
       return;
     }
-      this.postService.deleteCommets( id )
+
+    this.spinnerService.show();
+    this.commentService.deleteComment( id )
       .subscribe({
         next: _ => {
-          this.getComments();
+          this.spinnerService.hide();
         },
-        error: err => console.error(err)
+        error: err => {
+          this.spinnerService.hide();
+          console.error(err)
+        }
       });
+  }
+
+  hideComment( id: string, hide: boolean ): void {
+    this.commentId = id;
+    if(hide) {
+      if( !confirm('¿Desea ocultar el comentario?') ){
+        return;
+      }
+      
+      this.spinnerService.show()
+      const visible = {
+        hide: true
+      }
+      
+      this.getComment( visible )
+    } else {
+      if( !confirm('¿Desea volver visible el comentario?') ){
+        return;
+      }
+      
+      this.spinnerService.show()
+      const visible = {
+        hide: false
+      }
+      
+      this.getComment( visible )
+    }
+  }
+
+  getComment( visible: object ): void {
+    this.commentService.editComment( this.commentId, visible )
+    .subscribe({
+      next: _ => {
+        this.spinnerService.hide()
+      },
+      error: _ => {
+        this.spinnerService.hide()
+      }
+    })
   }
 
 }

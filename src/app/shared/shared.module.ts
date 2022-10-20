@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { UserComponent } from './components/user/user.component';
+import { DefaultImgDirective } from './directives/defaultImg.directive';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { UserComponent } from './components/user/user.component';
     HeaderComponent,
     SpinnerComponent,
     UserComponent,
+    DefaultImgDirective
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { UserComponent } from './components/user/user.component';
     HeaderComponent,
     PrimeNgModule,
     SpinnerComponent,
-    UserComponent
+    UserComponent,
+    DefaultImgDirective
   ]
 })
 export class SharedModule { }

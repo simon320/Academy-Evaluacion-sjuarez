@@ -5,7 +5,7 @@ import { Observable, from } from 'rxjs';
 import { Post } from '../interfaces/post.interface';
 import { Comments } from '../interfaces/comments.interface';
 import { environment } from '../../../environments/environment';
-import { collectionData, Firestore, collection, setDoc, doc, getDoc, updateDoc, DocumentSnapshot, addDoc, deleteDoc } from '@angular/fire/firestore';
+import { collectionData, Firestore, collection, setDoc, doc, getDoc, updateDoc, DocumentSnapshot, addDoc, deleteDoc, docSnapshots } from '@angular/fire/firestore';
 
 
 
@@ -31,11 +31,9 @@ export class PostService {
     return collectionData( postRef, { idField: 'id' }) as Observable<Post[]>;
   }
 
-
-
-  getPostById( id: string ): Observable<DocumentSnapshot> {
+  getPostById( id: string ): Observable<Post> {
     const postRef = doc(this.firestore, 'posts', id);
-    return from(getDoc( postRef ));
+    return docSnapshots( postRef ) as unknown as Observable<Post>;
   }
 
   editPost( uid: string, post: any) {
@@ -59,15 +57,15 @@ export class PostService {
     return this.http.get<Comments[]>( `${ this.herokuPost }/comments?postId=${ id }` );
   }
 
-  addCommets( comment: Comments ): Observable<Comments> {
-    return this.http.post<Comments>( `${ this.herokuPost }/comments?postId=${ comment.postId }`, comment );
-  }
+  // addCommets( comment: Comments ): Observable<Comments> {
+  //   return this.http.post<Comments>( `${ this.herokuPost }/comments?postId=${ comment.postId }`, comment );
+  // }
 
   editCommets( comment: Comments ): Observable<Comments> {
     return this.http.put<Comments>( `${ this.herokuPost }/comments/${ comment.id }`, comment );
   }
 
-  deleteCommets( id: number ): Observable<Comments>{
+  deleteCommets( id: string ): Observable<Comments>{
     return this.http.delete<Comments>( `${ this.herokuPost }/comments/${ id }`);
   }
 

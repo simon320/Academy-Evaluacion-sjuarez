@@ -3,18 +3,18 @@ import { CommonModule } from '@angular/common';
 
 import { PostRoutingModule } from './post-routing.module';
 
-import { AlternCasePipe } from './pipes/altern-case.pipe';
 import { CommentsComponent } from './components/comments/comments.component';
 import { DetailsComponent } from './pages/details/details.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { CreatePostComponent } from './components/create-post/create-post.component';
+import { DatePipe } from './pipes/date.pipe';
 
 
 @NgModule({
   declarations: [
-    AlternCasePipe,
+    DatePipe,
     CommentsComponent,
     DetailsComponent,
     HomeComponent,

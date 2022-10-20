@@ -1,13 +1,15 @@
 import { Comments } from './comments.interface';
 export interface Post {
-    title   : string;
-    body    : string;
-    author? : Author;
-    date?   : Date;
-    id?     : number;
-    userId? : number;
-    hide    : boolean;
-    comments: Comments | null;
+    data?        : any;
+    title        : string;
+    body         : string;
+    author?      : Author;
+    date?        : any;
+    id?          : number;
+    userId?      : number;
+    hide         : boolean;
+    blockComments: boolean;
+    comments     : Comments[] | [];
 }
 
 export interface Author {
