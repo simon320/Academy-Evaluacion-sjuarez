@@ -1,3 +1,4 @@
+import { User } from '../../user/interfaces/user.interface';
 import { Author } from './post.interface';
 export interface Comments {
     postId? : string;
@@ -6,7 +7,7 @@ export interface Comments {
     title   : string;
     body    : string;
     date?   : any;
-    author  : Author;
+    author  : User | any;
     hide    : boolean;
 }
 

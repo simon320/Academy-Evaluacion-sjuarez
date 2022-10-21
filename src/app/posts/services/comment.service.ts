@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { collectionData, Firestore, collection, setDoc, doc, getDoc, updateDoc, DocumentSnapshot, addDoc, deleteDoc, docSnapshots } from '@angular/fire/firestore';
+import { collectionData, Firestore, collection, doc, updateDoc, addDoc, deleteDoc, DocumentSnapshot } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
+
 import { Comments } from '../interfaces/comments.interface';
 
 
@@ -11,17 +12,17 @@ export class CommentService {
 
   constructor( private firestore: Firestore ) { }
 
-  addComment( comment: Comments) {
+  addComment( comment: Comments): Observable<any> {
     const commentRef = collection(this.firestore, "comments");
     return from(addDoc( commentRef, comment ));
   }
 
-  editComment( uid: string, comment: any) {
+  editComment( uid: string, comment: object): Observable<any> {
     const commentRef = doc(this.firestore, 'comments', uid );
     return from(updateDoc( commentRef, comment))
   }
 
-  deleteComment( uid: string ) {
+  deleteComment( uid: string ): Observable<any> {
     const commentRef = doc(this.firestore, 'comments', uid );
     return from(deleteDoc( commentRef ))
   }

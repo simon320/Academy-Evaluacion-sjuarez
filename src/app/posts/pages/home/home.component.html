@@ -1,6 +1,5 @@
 <app-header></app-header>
 <app-alert></app-alert>
-<app-user *ngIf="userEdit"></app-user>
 
 <div *ngIf="true" class="flex-column align-items-center m-3">
 
@@ -13,7 +12,7 @@
             </ng-template>
             <p class="mt-0 md:px-4">
                 Animate y crea un nuevo Post!
-                Seguro algo tienes para contar que a los demas pueda interesarles.
+                Seguro tienes algo para contar que a los demas pueda interesarles.
             </p>
             <ng-template pTemplate="footer">
                 <p-button label="Crear" (click)="showCreatePost(true)" class="ml-8 md:ml-0" icon="pi pi-plus"></p-button>
@@ -26,7 +25,7 @@
     </ng-template>
     
     
-    <p-table [value]="showPost" [paginator]="post.length >= 10" [rows]="10" [showCurrentPageReport]="true" [responsive]="true"
+    <p-table [value]="showPosts" [paginator]="posts.length >= 10" [rows]="10" [showCurrentPageReport]="true" [responsive]="true"
     currentPageReportTemplate="{first} a {last} de {totalRecords} post" [rowsPerPageOptions]="[10,25,50]">
 
         <ng-template pTemplate="header">

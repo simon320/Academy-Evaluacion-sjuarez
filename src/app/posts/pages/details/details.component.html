@@ -6,7 +6,8 @@
 
     
     <div class="img__container">
-        <img emptyImg [valueImg]="postDetails.author!.photoUrl" [src]="postDetails.author!.photoUrl" [alt]="postDetails.author!.username">
+        <img *ngIf="postDetails.author.photoUrl" emptyImg [valueImg]="postDetails.author.photoUrl" [src]="postDetails.author!.photoUrl" [alt]="postDetails.author!.username">
+        <img *ngIf="!postDetails.author.photoUrl" src="../../../assets/defaultImg.jpg" [alt]="postDetails.author!.username">
     </div>
     
     <p> {{ postDetails.author!.username }} </p>
@@ -15,7 +16,6 @@
     <h1 class="mt-0"> {{ postDetails.title | titlecase }} </h1>
     
     <h4> {{ postDetails.body }} </h4>
-    
 
     <div *ngIf="postDetails.author!.id === currentUser.id || currentUser.rol === 'admin'" class="flex justify-content-end pr-5">
         <button *ngIf="postDetails.author!.id === currentUser.id" (click)="openEditPost()" pButton pRipple type="button"icon="pi pi-pencil"

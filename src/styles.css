@@ -23,7 +23,7 @@ a {
     outline: #0b111b 2px solid;
 }
 .img__container img {
-    height: 100px;
+    width: 100px;
 }
 
 .img__container-comment {

@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { ValidatorService } from '../../../shared/services/validator.service';
+import { timer } from 'rxjs';
+
+import { ErrorService } from '../../../shared/services/error.service';
 import { Router } from '@angular/router';
-import { User } from '../../../posts/interfaces/user.interface';
-import { UserService } from '../../../shared/services/user.service';
 import { SpinnerService } from '../../../shared/services/spinner.service';
+import { User } from '../../../user/interfaces/user.interface';
+import { UserService } from '../../../user/services/user.service';
+import { ValidatorService } from '../../../shared/services/validator.service';
 
 
 @Component({
@@ -16,11 +19,13 @@ export class RegisterComponent {
 
   registerForm!: FormGroup;
   uid!: string;
+  timer$ = timer(2500);
 
   constructor( 
     private fb: FormBuilder,
     private vs: ValidatorService,
     private userService: UserService,
+    private errorService: ErrorService,
     private spinnerService: SpinnerService,
     private router: Router,
   ) { this.createForm(); }
@@ -61,7 +66,7 @@ export class RegisterComponent {
     return '';
   }
 
-  createForm() {
+  createForm(): void {
     this.registerForm = this.fb.group({
       username: ['', [ Validators.required, Validators.minLength(4), Validators.pattern( this.vs.notEmpty ) ]],
       email: ['', [ Validators.required, Validators.pattern( this.vs.emailPattern )] ],
@@ -83,23 +88,30 @@ export class RegisterComponent {
 
   }
 
-  async createRegister() {
+  createRegister(): void {
     if(this.registerForm.invalid) {
         this.registerForm.markAllAsTouched();
       return;
     }
     this.spinnerService.show();
 
-    const { username, email, password }  = this.registerForm.value
+    const { email, password }  = this.registerForm.value
    
-    await this.userService.register( email, password )
-      .then( resp => {
+    this.userService.register( email, password )
+      .subscribe({
+        next: resp => {
         this.uid = resp.user?.uid!
-      })
-      .catch( err => {
-        this.spinnerService.hide()
-        this.firebaseError(err.code)
-      })
+        this.createUser();
+      },
+        error: err => {
+          this.spinnerService.hide()
+          this.firebaseError(err.code)
+      }
+    })
+  }
+
+  createUser(): void {
+    const { username, email }  = this.registerForm.value
 
     const userRegister: User = {
       id: this.uid,
@@ -112,17 +124,19 @@ export class RegisterComponent {
       rol: 'Usuario',
       city: '',
     }
-    
 
-    await this.userService.addUser( this.uid, userRegister )
-      .then( _ => {
-        this.router.navigate(['/auth/login'])
-        this.spinnerService.hide()
-      })
-      .catch( _ => {
-        this.spinnerService.hide()
-      })
-
+    this.userService.addUser( this.uid, userRegister )
+      .subscribe({
+        next: _ => {
+          this.router.navigate(['/auth/login'])
+          this.spinnerService.hide()
+      },
+        error: _ => {
+          this.spinnerService.hide()
+          this.errorService.show();
+          this.timer$.subscribe( _ => this.errorService.hide())
+      }
+    })
   }
 
   firebaseError( code: string ): void {
@@ -130,5 +144,4 @@ export class RegisterComponent {
       this.registerForm.get('email')?.setErrors({ emailExists: true })
     }
   }
-
 }

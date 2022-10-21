@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Like } from '../interfaces/comments.interface';
+import { Like } from '../../posts/interfaces/comments.interface';
 
 @Pipe({
   name: 'likePipe'

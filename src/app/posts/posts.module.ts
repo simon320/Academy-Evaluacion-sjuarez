@@ -9,18 +9,20 @@ import { HomeComponent } from './pages/home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { CreatePostComponent } from './components/create-post/create-post.component';
-import { DatePipe } from './pipes/date.pipe';
-import { LikePipe } from './pipes/like.pipe';
+import { DatePipe } from '../shared/pipes/date.pipe';
+import { LikePipe } from '../shared/pipes/like.pipe';
+import { PostUserNamePipe } from '../shared/pipes/post-user.pipe';
 
 
 @NgModule({
   declarations: [
-    DatePipe,
-    LikePipe,
     CommentsComponent,
-    DetailsComponent,
-    HomeComponent,
     CreatePostComponent,
+    DatePipe,
+    DetailsComponent,
+    LikePipe,
+    HomeComponent,
+    PostUserNamePipe
   ],
   imports: [
     CommonModule,

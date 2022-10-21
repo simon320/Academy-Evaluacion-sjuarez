@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { ErrorPageComponent } from './shared/pages/error-page/error-page.component';
 import { ToPersistGuard } from './guards/to-persist.guard';
 import { AuthGuard } from './guards/auth.guard';
-import { UserComponent } from './shared/components/user/user.component';
 
 const routes: Routes = [
   {
@@ -25,7 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'user',
-    component: UserComponent,
+    loadChildren: () => import('./user/user.module').then( m => m.UserModule),
     canLoad: [ AuthGuard ],
     canActivate: [ AuthGuard ],
   },

@@ -6,7 +6,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { AlertComponent } from './components/alert/alert.component';
-import { UserComponent } from './components/user/user.component';
 import { DefaultImgDirective } from './directives/defaultImg.directive';
 import { MapComponent } from './components/map/map.component';
 
@@ -17,7 +16,6 @@ import { MapComponent } from './components/map/map.component';
     ErrorPageComponent,
     HeaderComponent,
     SpinnerComponent,
-    UserComponent,
     DefaultImgDirective,
     MapComponent
   ],
@@ -30,10 +28,10 @@ import { MapComponent } from './components/map/map.component';
     AlertComponent,
     ErrorPageComponent,
     HeaderComponent,
+    MapComponent,
     PrimeNgModule,
     SpinnerComponent,
-    UserComponent,
     DefaultImgDirective
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

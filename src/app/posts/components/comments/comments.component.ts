@@ -1,13 +1,13 @@
-import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { timer } from 'rxjs';
 
 import { Comments, Like } from '../../interfaces/comments.interface';
-import { PostService } from '../../services/post.service';
-import { User } from '../../interfaces/user.interface';
-import { ValidatorService } from '../../../shared/services/validator.service';
 import { CommentService } from '../../services/comment.service';
+import { ErrorService } from '../../../shared/services/error.service';
 import { SpinnerService } from '../../../shared/services/spinner.service';
+import { User } from '../../../user/interfaces/user.interface';
+import { ValidatorService } from '../../../shared/services/validator.service';
 
 @Component({
   selector: 'app-comments',
@@ -24,18 +24,16 @@ export class CommentsComponent implements OnInit {
   @Input() commentsForUser!: Comments[];
   @Input() showCommentForm!: boolean;
   @Input() postId!: string;
-  @Output() dateEvent: EventEmitter<Date> = new EventEmitter();
   date: Date = new Date();
-  comments: Comments[] = [];
-  validationToggle: boolean = false;
-  labelButton: string = "Cambiar a Mayuscula";
   currentUser!: User;
   commentId!: string;
   showBtnEdit: boolean = false;
   commentForm!: FormGroup;
+  timer$ = timer(2500);
 
   constructor( 
     private commentService: CommentService,
+    private errorService: ErrorService,
     private spinnerService: SpinnerService,
     private fb: FormBuilder,
     private vs: ValidatorService
@@ -67,7 +65,7 @@ export class CommentsComponent implements OnInit {
     return '';
   }
 
-  createForm(){
+  createForm(): void{
     this.commentForm = this.fb.group({
       title: ['', [ Validators.required ]],
       body: ['', [ Validators.required, Validators.maxLength(200)]],
@@ -104,8 +102,6 @@ export class CommentsComponent implements OnInit {
       hide: false,
       author: {
         id: this.currentUser.id,
-        username: this.currentUser.username,
-        photoUrl: this.currentUser.photoUrl,
       }
     }
     
@@ -115,10 +111,11 @@ export class CommentsComponent implements OnInit {
           this.commentForm.reset({});
           this.spinnerService.hide();
         },
-        error: err => {
-          console.error(err)
+        error: _ => {
           this.spinnerService.hide();
-        }
+          this.errorService.show();
+          this.timer$.subscribe( _ => this.errorService.hide())
+        },
       })
   }
 
@@ -149,11 +146,13 @@ export class CommentsComponent implements OnInit {
         next: _ => {
           this.commentForm.reset({});
           this.spinnerService.hide();
+          this.showBtnEdit = false;
         },
-        error: err => {
+        error: _ => {
           this.spinnerService.hide();
-          console.error(err)
-        }
+          this.errorService.show();
+          this.timer$.subscribe( _ => this.errorService.hide())
+        },
       })
   }
 
@@ -168,10 +167,11 @@ export class CommentsComponent implements OnInit {
         next: _ => {
           this.spinnerService.hide();
         },
-        error: err => {
+        error: _ => {
           this.spinnerService.hide();
-          console.error(err)
-        }
+          this.errorService.show();
+          this.timer$.subscribe( _ => this.errorService.hide())
+        },
       });
   }
 
@@ -208,14 +208,16 @@ export class CommentsComponent implements OnInit {
       next: _ => {
         this.spinnerService.hide()
       },
-      error: _ => {
-        this.spinnerService.hide()
-      }
+	    error: _ => {
+        this.spinnerService.hide();
+        this.errorService.show();
+        this.timer$.subscribe( _ => this.errorService.hide())
+      },
     })
   }
 
 
-  sendLike(commentid: string, userid: string, username: string, like: Like[]) {
+  sendLike(commentid: string, userid: string, username: string, like: Like[]): void {
     this.spinnerService.show()
     const newLike = {
           id: userid,
@@ -229,9 +231,11 @@ export class CommentsComponent implements OnInit {
       next: _ => {
         this.spinnerService.hide()
       },
-      error: _ => {
-        this.spinnerService.hide()
-      }
+	    error: _ => {
+        this.spinnerService.hide();
+        this.errorService.show();
+        this.timer$.subscribe( _ => this.errorService.hide())
+      },
     })
   }
 

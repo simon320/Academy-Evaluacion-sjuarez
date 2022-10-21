@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../../../shared/services/user.service';
+import { timer } from 'rxjs';
+
+import { ErrorService } from '../../../shared/services/error.service';
 import { SpinnerService } from '../../../shared/services/spinner.service';
+import { UserService } from '../../../user/services/user.service';
 
 
 @Component({
@@ -14,17 +17,19 @@ export class LoginComponent {
   currentUser!: any;
   wrongCredentials: boolean = false;
   loginForm!: FormGroup;
+  timer$ = timer(1500);
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private errorService: ErrorService,
     private spinnerService: SpinnerService,
     private router: Router
   ) {
     this.createForm();
   }
 
-  createForm() {
+  createForm(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -37,7 +42,7 @@ export class LoginComponent {
     );
   }
 
-  login() {
+  login(): void {
     const { email, password } = this.loginForm.value;
 
     this.spinnerService.show();
@@ -55,14 +60,17 @@ export class LoginComponent {
 
   }
 
-  getCurrentUser(uid: string) {
+  getCurrentUser(uid: string): void {
     this.userService.getUserById(uid).subscribe({
       next: (resp) => {
-        this.currentUser = resp.data();
+        this.currentUser = resp.data!();
         localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
         this.router.navigate(['/post']);
       },
-      error: (err) => console.error(err),
+      error: _ => {
+        this.errorService.show();
+        this.timer$.subscribe( _ => this.errorService.hide())
+      },
     });
   }
 

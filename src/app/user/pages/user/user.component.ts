@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ValidatorService } from '../../services/validator.service';
-import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
-import { User } from '../../../posts/interfaces/user.interface';
-import { SpinnerService } from '../../services/spinner.service';
+import { User } from '../../interfaces/user.interface';
 import { timer } from 'rxjs';
+import { ValidatorService } from '../../../shared/services/validator.service';
+import { UserService } from '../../services/user.service';
+import { SpinnerService } from '../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-user',
@@ -96,7 +96,8 @@ export class UserComponent implements OnInit {
           longitude: position.coords.longitude,
         })
         
-        return this.lngLat = [position.coords.longitude, position.coords.latitude]
+        this.lngLat = [position.coords.longitude, position.coords.latitude]
+        return this.lngLat;
       });
     }
 

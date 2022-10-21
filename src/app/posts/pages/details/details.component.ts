@@ -1,15 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Subscription, switchMap, tap, map, filter, from } from 'rxjs';
+import { Subscription, switchMap, tap, filter, from, timer } from 'rxjs';
 
-import { PostService } from '../../services/post.service';
-import { User } from '../../interfaces/user.interface';
-import { ValidatorService } from '../../../shared/services/validator.service';
-import { SpinnerService } from '../../../shared/services/spinner.service';
 import { Comments } from '../../interfaces/comments.interface';
 import { CommentService } from '../../services/comment.service';
 import { Post } from '../../interfaces/post.interface';
+import { PostService } from '../../services/post.service';
+import { SpinnerService } from '../../../shared/services/spinner.service';
+import { User } from '../../../user/interfaces/user.interface';
+import { UserService } from 'src/app/user/services/user.service';
+import { ValidatorService } from '../../../shared/services/validator.service';
+import { ErrorService } from '../../../shared/services/error.service';
 
 
 @Component({
@@ -36,13 +38,16 @@ export class DetailsComponent implements OnInit, OnDestroy{
   commentsForAdmin: Comments[] = []
   commentsForUser: Comments[] = []
   showCommentForm: boolean = true;
+  timer$ = timer(2500);
   
 
   constructor( 
     private activatedRoute: ActivatedRoute,
     private postService: PostService,
+    private userService: UserService,
     private commentService: CommentService,
     private spinnerService: SpinnerService,
+    private errorService: ErrorService,
     private fb: FormBuilder,
     private vs: ValidatorService,
     private router: Router
@@ -75,11 +80,23 @@ export class DetailsComponent implements OnInit, OnDestroy{
       .subscribe({
         next: resp => {
           this.postDetails = resp.data()
+          this.getAuthor()
           this.date = new Date(this.postDetails.date.seconds*1000)
           this.showCommentForm = !this.postDetails.blockComments
         },
         error: _ => this.router.navigate(['error'])
       });
+  }
+
+  getAuthor() {
+    this.userService.getUserById( this.postDetails.author?.id! )
+    .subscribe({
+      next: author => this.postDetails.author = author.data!(),
+	    error: _ => {
+        this.errorService.show();
+        this.timer$.subscribe( _ => this.errorService.hide())
+      },
+    })
   }
 
   getComments(): void {
@@ -89,14 +106,29 @@ export class DetailsComponent implements OnInit, OnDestroy{
         next: comments => {
           this.comments = comments
           this.getCommentPost()
+          this.getAuthorComment()
           this.getLastComment()
           this.spinnerService.hide()
         },
-        error: err => {
-          this.spinnerService.hide()
-          console.error(err)
-        }
+        error: _ => {
+          this.spinnerService.hide();
+          this.errorService.show();
+          this.timer$.subscribe( _ => this.errorService.hide())
+        },
       });
+  }
+  
+  getAuthorComment() {
+    this.comments.forEach( comment => {
+      this.userService.getUserById( comment.author.id )
+      .subscribe({
+        next: author => comment.author = author.data!(),
+        error: _ => {
+          this.errorService.show();
+          this.timer$.subscribe( _ => this.errorService.hide())
+        },
+      })
+    })
   }
 
   get titleErrorMsg(): string {
@@ -145,11 +177,14 @@ export class DetailsComponent implements OnInit, OnDestroy{
     this.showEditPost = true;
   }
 
-  refreshPost() {
+  refreshPost(): void {
     this.postService.getPostById( this.postId )
       .subscribe({
         next: resp => this.postDetails = resp['data'](),
-        error: err => console.error(err)
+        error: _ => {
+          this.errorService.show();
+          this.timer$.subscribe( _ => this.errorService.hide())
+        },
       })
   }
 
@@ -184,17 +219,35 @@ export class DetailsComponent implements OnInit, OnDestroy{
       return;
     }
 
+    const amountPost = {
+      amountPost: this.currentUser.amountPost - 1
+    } 
+
     this.spinnerService.show()
     this.postService.deletePost( this.postId )
       .subscribe({
         next: _ => {
-          this.router.navigate(['/post'])
-          this.spinnerService.hide()
+          this.decrementAmountPost( this.currentUser.id, amountPost)
         },
         error: _ => {
           this.spinnerService.hide()
         }
       });
+  }
+
+  decrementAmountPost( id: string, amoutPost: object): void {
+    this.userService.editUser( id, amoutPost )
+      .subscribe({
+        next: _ => {
+          this.spinnerService.hide()
+          this.router.navigate(['/post'])
+        },
+        error: _ => {
+          this.spinnerService.hide();
+          this.errorService.show();
+          this.timer$.subscribe( _ => this.errorService.hide())
+        },
+      })
   }
 
   hidePost( hide: boolean ): void {
@@ -230,13 +283,15 @@ export class DetailsComponent implements OnInit, OnDestroy{
         this.refreshPost();
         this.spinnerService.hide()
       },
-      error: _ => {
-        this.spinnerService.hide()
-      }
+	    error: _ => {
+        this.spinnerService.hide();
+        this.errorService.show();
+        this.timer$.subscribe( _ => this.errorService.hide())
+      },
     })
   }
 
-  getCommentPost() {
+  getCommentPost(): void {
     this.commentsForAdmin = this.comments.filter( comment => comment.postId === this.postId )
     this.commentsForAdmin.sort((a, b) => a.date - b.date)
     
@@ -245,9 +300,11 @@ export class DetailsComponent implements OnInit, OnDestroy{
       .pipe(
         filter( comment => comment.hide === false),
       ).subscribe({
-          next: comment => {
-            arrayComments.push(comment)
-          }
+          next: comment => arrayComments.push(comment),
+          error: _ => {
+            this.errorService.show();
+            this.timer$.subscribe( _ => this.errorService.hide())
+          },
       })
 
     this.commentsForUser = arrayComments.reduce( (acc: any, item: any) => {
@@ -256,7 +313,6 @@ export class DetailsComponent implements OnInit, OnDestroy{
       }
       return acc;
     }, [])
-
   }
   
   getLastComment(): void {
@@ -270,7 +326,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
     this.lastComment = this.commentsForAdmin[lastIndex];
   }
 
-  orderList() {
+  orderList(): Comments[] {
     return this.commentsForAdmin.sort((a, b) => a.date.seconds - b.date.seconds);
   }
 
