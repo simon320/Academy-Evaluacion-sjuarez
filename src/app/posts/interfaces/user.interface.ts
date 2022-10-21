@@ -6,17 +6,7 @@ export interface User {
     email     : string;
     birthday  : string;
     password? : string;
-    address   : Address;
+    city      : string;
     rol       : string;
     amountPost: number;
-}
-
-export interface Address {
-    city: string;
-    geo : Geo;
-}
-
-export interface Geo {
-    lat: string;
-    lng: string;
 }

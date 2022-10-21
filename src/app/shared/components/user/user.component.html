@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<div class="flex-column p-2">
+<div class="user__container flex-column p-2">
     <div class="flex justify-content-end">
         <button pButton type="button" (click)="close()" class="p-button-outlined mr-3 mt-2"
         icon="pi pi-times"></button>
@@ -91,12 +91,34 @@
                                 <input pInputText type="text" placeholder="Url de la foto" formControlName="photoUrl">
                             </div>
                         </div>
-
-                        <div class="p-inputgroup flex align-items-center justify-content-end mt-3">
-                            <button pButton type="button" (click)="saveEditData()" label="Guardar datos"></button>
-                        </div>
+                    </div>
+                    <div class="p-inputgroup flex align-items-center justify-content-end mt-3">
+                        <button pButton type="button" (click)="saveEditData()" label="Guardar datos"></button>
                     </div>
     
+                </div>
+            </form>
+            <form [formGroup]="locationForm" autocomplete="off" class="w-full">
+                <!-- Latitud -->
+                <div class="w-19rem md:col-12 m-auto field">
+                    <label class="block">Latitud</label>
+                    <div class="p-inputgroup flex relative">
+                        <input pInputText type="text" placeholder="Latitud" formControlName="latitude">
+                    </div>
+                </div>
+
+                <!-- Longitud -->
+                <div class="w-19rem md:col-12 m-auto field">
+                    <label class="block">Longitud</label>
+                    <div class="p-inputgroup flex relative">
+                        <input pInputText type="text" placeholder="Longitud" formControlName="longitude">
+                    </div>
+                </div>
+                <div class="p-inputgroup flex align-items-center justify-content-end mt-3">
+                    <button pButton type="button" (click)="getLocation()" label="Conseguir ubicación"></button>
+                </div>
+                <div class="p-inputgroup flex align-items-center justify-content-end mt-3">
+                    <button pButton type="button" (click)="showLocation()" label="Ver en mapa"></button>
                 </div>
             </form>
     
@@ -109,4 +131,13 @@
         </div>
     </div>
 
+    <div *ngIf="showPosition" class="background">
+        <div class="map__container relative">
+            <button pButton type="button" (click)="closeLocation()" class="p-buttons top-0 right-0 m-2 absolute z-5"
+            icon="pi pi-times"></button>
+            <app-map [lngLat]="lngLat" class="card-img-top"></app-map>
+        </div>
+    </div>
 </div>
+
+

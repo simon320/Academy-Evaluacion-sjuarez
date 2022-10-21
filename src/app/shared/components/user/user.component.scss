@@ -1,3 +1,7 @@
+.user__container {
+    position: relative;
+}
+
 
 .header__labels {
     color: rgb(138, 138, 138);
@@ -31,6 +35,29 @@
         justify-content: center;
         align-items: center;
     }
+}
+
+.background {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 100vh;
+    width: 100%;
+    background: #070c11c1;
+}
+
+.map__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 300px;
 }
 
 @media (min-width: 700px) {

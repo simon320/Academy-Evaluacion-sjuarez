@@ -110,13 +110,7 @@ export class RegisterComponent {
       birthday: '',
       amountPost: 0,
       rol: 'Usuario',
-      address: {
-          city: '',
-          geo: {
-              lat: '',
-              lng: ''
-          }
-      },
+      city: '',
     }
     
 

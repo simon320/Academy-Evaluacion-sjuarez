@@ -8,6 +8,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { UserComponent } from './components/user/user.component';
 import { DefaultImgDirective } from './directives/defaultImg.directive';
+import { MapComponent } from './components/map/map.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { DefaultImgDirective } from './directives/defaultImg.directive';
     HeaderComponent,
     SpinnerComponent,
     UserComponent,
-    DefaultImgDirective
+    DefaultImgDirective,
+    MapComponent
   ],
   imports: [
     CommonModule,

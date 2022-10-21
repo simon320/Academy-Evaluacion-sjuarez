@@ -18,8 +18,11 @@ export class UserComponent implements OnInit {
     success: boolean = false;
     error: boolean = false;
     editForm!: FormGroup;
+    locationForm!: FormGroup;
     routeUrl!: string;
     timer$ = timer(1500);
+    showPosition: boolean = false;
+    lngLat: [number, number] = [-60.1372938, -12.9984269]
 
   
     constructor( 
@@ -34,7 +37,7 @@ export class UserComponent implements OnInit {
         this.getCurrentUser() 
         this.createForm()
         this.resetForm()
-        this.uid = localStorage.getItem('uid')!
+        this.uid = localStorage.getItem('uid')!;
     }
   
     createForm(): void {
@@ -44,6 +47,11 @@ export class UserComponent implements OnInit {
         birthday: [''],
         city: [''],
         photoUrl: [''],
+      })
+
+      this.locationForm = this.fb.group({
+        latitude: [{value:'', disabled: true}],
+        longitude: [{value:'', disabled: true}]
       })
     }
 
@@ -64,7 +72,7 @@ export class UserComponent implements OnInit {
         name: this.currentUser.name,
         username: this.currentUser.username,
         birthday: this.currentUser.birthday,
-        city: this.currentUser.address.city,
+        city: this.currentUser.city,
         photoUrl: this.currentUser.photoUrl,
       })
       this.editForm.untouched;
@@ -79,6 +87,25 @@ export class UserComponent implements OnInit {
   
     setCurrentUser( user: User): void {
       localStorage.setItem('currentUser', JSON.stringify( user ))
+    }
+
+    getLocation() {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.locationForm.reset({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        })
+        
+        return this.lngLat = [position.coords.longitude, position.coords.latitude]
+      });
+    }
+
+    showLocation() {
+      this.showPosition = true;
+    }
+
+    closeLocation() {
+      this.showPosition = false;
     }
   
     inputCheck( form: FormGroup, input: string, type: string ): boolean | undefined {
@@ -105,14 +132,9 @@ export class UserComponent implements OnInit {
           birthday: this.editForm.get('birthday')?.value,
           amountPost: this.currentUser.amountPost,
           rol: this.currentUser.rol,
-          address: {
-              city: this.editForm.get('city')?.value,
-              geo: {
-                  lat: "",
-                  lng: ""
-              }
-          },
+          city: this.editForm.get('city')?.value,
         }
+      
         this.userService.editUser( this.uid, userEdit )
           .subscribe({ 
             next: _ => {
@@ -129,7 +151,7 @@ export class UserComponent implements OnInit {
               this.spinnerService.hide()
             }
           });
-        }
+      }
     }
   
     close(): void {
