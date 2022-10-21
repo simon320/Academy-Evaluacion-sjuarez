@@ -15,17 +15,19 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then( m => m.AuthModule ),
-    // canActivate: [ ToPersistGuard ]
+    canActivate: [ ToPersistGuard ]
   },
   {
     path: 'post',
     loadChildren: () => import('./posts/posts.module').then( m => m.PostsModule),
-    // canLoad: [ AuthGuard ],
-    // canActivate: [ AuthGuard ]
+    canLoad: [ AuthGuard ],
+    canActivate: [ AuthGuard ]
   },
   {
     path: 'user',
-    component: UserComponent
+    component: UserComponent,
+    canLoad: [ AuthGuard ],
+    canActivate: [ AuthGuard ],
   },
   {
     path: '404',

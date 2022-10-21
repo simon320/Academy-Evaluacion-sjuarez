@@ -115,10 +115,10 @@
                     </div>
                 </div>
                 <div class="p-inputgroup flex align-items-center justify-content-end mt-3">
-                    <button pButton type="button" (click)="getLocation()" label="Conseguir ubicación"></button>
+                    <button pButton type="button" (click)="getLocation()" label="Conseguir mi ubicación"></button>
                 </div>
-                <div class="p-inputgroup flex align-items-center justify-content-end mt-3">
-                    <button pButton type="button" (click)="showLocation()" label="Ver en mapa"></button>
+                <div *ngIf="lngLat" class="p-inputgroup flex align-items-center justify-content-end mt-3">
+                    <button pButton type="button" (click)="showMap()" label="Ver en mapa"></button>
                 </div>
             </form>
     

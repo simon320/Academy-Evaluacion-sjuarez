@@ -20,10 +20,10 @@ export class MapComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const map = new mapboxgl.Map({
-      container: this.divMap.nativeElement, // container ID
+      container: this.divMap.nativeElement, 
       style: 'mapbox://styles/mapbox/streets-v11', 
       center: this.lngLat,
-      zoom: 14,
+      zoom: 15,
       interactive: false
     })
 

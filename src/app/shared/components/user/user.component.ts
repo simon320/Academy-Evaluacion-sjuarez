@@ -22,7 +22,7 @@ export class UserComponent implements OnInit {
     routeUrl!: string;
     timer$ = timer(1500);
     showPosition: boolean = false;
-    lngLat: [number, number] = [-60.1372938, -12.9984269]
+    lngLat!: [number, number];
 
   
     constructor( 
@@ -100,7 +100,7 @@ export class UserComponent implements OnInit {
       });
     }
 
-    showLocation() {
+    showMap() {
       this.showPosition = true;
     }
 

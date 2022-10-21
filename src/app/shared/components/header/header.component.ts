@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { SpinnerService } from '../../services/spinner.service';
 
 @Component({
   selector: 'app-header',
@@ -14,6 +15,7 @@ export class HeaderComponent implements OnInit {
 
   constructor( 
     private userService: UserService,
+    private spinnerService: SpinnerService,
     private router: Router
   ) { }
 
@@ -48,12 +50,20 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     if ( confirm('¿Desea cerrar la sesion?') ){
+      this.spinnerService.show()
+
       this.userService.logout()
-        .then(() => {
-          localStorage.removeItem('currentUser');
-          this.router.navigate(['/auth/login']);
+        .subscribe({
+          next: _ => {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('uid');
+            this.router.navigate(['/auth/login']);
+          },
+          error: error => {
+            console.error(error)
+            this.spinnerService.hide()
+          }
         })
-        .catch( error => console.error(error) )
     } else {
       return;
     }

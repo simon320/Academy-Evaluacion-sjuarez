@@ -12,7 +12,7 @@ export class ToPersistGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
-    if( localStorage.getItem('currentUser') ) {
+    if( localStorage.getItem('uid') ) {
       this.router.navigate(['/post'])
     }
 

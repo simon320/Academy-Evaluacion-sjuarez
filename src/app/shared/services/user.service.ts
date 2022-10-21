@@ -30,7 +30,7 @@ export class UserService {
   }
 
   logout() {
-    return this.auth.signOut();
+    return from(this.auth.signOut());
   }
 
   addUser( uid: string, user: any) {
