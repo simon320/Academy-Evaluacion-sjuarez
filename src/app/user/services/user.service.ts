@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth'
-import { Firestore, DocumentSnapshot, setDoc, doc, getDoc, updateDoc, docSnapshots } from '@angular/fire/firestore';
+import { Firestore, setDoc, doc, updateDoc, docSnapshots } from '@angular/fire/firestore';
 import { User } from '../interfaces/user.interface';
 
 
