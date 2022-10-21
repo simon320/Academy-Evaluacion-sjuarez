@@ -9,5 +9,6 @@ export const environment = {
     messagingSenderId: '239727561339',
   },
   production: true,
-  herokuPost: 'https://simon-juarez-endpoint.herokuapp.com'
+  mapboxToken: 'pk.eyJ1Ijoic2ltb24zMjAiLCJhIjoiY2w3ZzltN20wMDJjdTNubjVjMGFzZGtobCJ9.xBmyLV2JWuS8hvjPVAkSXA'
+  // herokuPost: 'https://simon-juarez-endpoint.herokuapp.com'
 };

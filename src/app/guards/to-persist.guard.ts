@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -12,11 +11,10 @@ export class ToPersistGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
-    if( localStorage.getItem('currentUser') ) {
+    if( localStorage.getItem('uid') ) {
       this.router.navigate(['/post'])
     }
 
     return true;
   }
-  
 }

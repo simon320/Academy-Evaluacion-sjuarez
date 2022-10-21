@@ -1,19 +1,93 @@
 <app-header></app-header>
 
-<div class="flex-column p-3">
+<div *ngIf="postDetails" class="flex-column p-3">
 
     <a routerLink="/post"><em class="pi pi-arrow-left"></em></a>
 
-    <div class="flex flex-column">
-        <h4 class="m-0 mt-2 ml-2">Detalles del Post: {{ postDetails.id }} </h4>
-        <h5 class="m-0 mb-6 ml-2"> Ultimo comentario: {{ date | date: 'yyyy, MMM, dd h:mm a' }} </h5>
+    
+    <div class="img__container">
+        <img *ngIf="postDetails.author.photoUrl" emptyImg [valueImg]="postDetails.author.photoUrl" [src]="postDetails.author!.photoUrl" [alt]="postDetails.author!.username">
+        <img *ngIf="!postDetails.author.photoUrl" src="../../../assets/defaultImg.jpg" [alt]="postDetails.author!.username">
     </div>
     
-    <h1> {{ postDetails.title | titlecase }} </h1>
+    <p> {{ postDetails.author!.username }} </p>
+    <h5 class="mb-0">Publicacion: <span class="text-primary">{{ postDetails.date | dateBySeconds | date: 'YY-MM-dd h:mm a' }} </span></h5>
+    <h5 *ngIf="lastComment" > Ultimo comentario: <span class="text-primary">{{ lastComment.date | dateBySeconds | date: 'YY-MM-dd h:mm a' }}</span></h5>
+    <h1 class="mt-0"> {{ postDetails.title | titlecase }} </h1>
     
     <h4> {{ postDetails.body }} </h4>
-    
-    <app-comments (dateEvent)="showDate($event)">
+
+    <div *ngIf="postDetails.author!.id === currentUser.id || currentUser.rol === 'admin'" class="flex justify-content-end pr-5">
+        <button *ngIf="postDetails.author!.id === currentUser.id" (click)="openEditPost()" pButton pRipple type="button"icon="pi pi-pencil"
+            class="p-button-rounded p-button-text"></button>
+        <button (click)="deletePost()" pButton pRipple type="button" icon="pi pi-trash"
+            class="p-button-rounded p-button-text"></button>
+        <button *ngIf="!postDetails.hide" (click)="hidePost(true)" pButton pRipple type="button" icon="pi pi-eye"
+            class="p-button-rounded p-button-text"></button>
+        <button *ngIf="postDetails.hide" (click)="hidePost(false)" pButton pRipple type="button" icon="pi pi-eye-slash"
+            class="p-button-rounded p-button-text"></button>
+        <div>
+            <button *ngIf="!postDetails.blockComments" (click)="blockComments(true)" pButton pRipple type="button" icon="pi pi-lock-open"
+            class="p-button-text"></button>
+            <button *ngIf="postDetails.blockComments" (click)="blockComments(false)" pButton pRipple type="button" icon="pi pi-lock" 
+            class="p-button-text"></button>
+        </div>
+    </div>
+
+    <div *ngIf="showEditPost">
+        <p-panel header="Editar Post">
+            <section class="scalein fadein">
+                <form [formGroup]="postForm">
+
+                    <!-- Titulo del comentario -->
+                    <div class="col-12 md:col-6 m-auto field">
+                        <div class="p-inputgroup flex relative">
+                            <input
+                                pInputText 
+                                type="text" 
+                                placeholder="Titulo del Post"
+                                formControlName="title"> 
+                        </div>
+                        <div class="h-1rem">
+                            <small *ngIf="inputInvalid('title')" class="text-center p-error block">
+                                {{ titleErrorMsg }}
+                            </small>        
+                        </div>    
+                    </div>
+
+                    <!-- Cuerpo del comentario -->
+                    <div class="col-12 md:col-6 m-auto field">
+                        <div class="p-inputgroup flex relative">
+                            <textarea formControlName="body" [rows]="5" [cols]="30" pInputTextarea [autoResize]="true"
+                                placeholder="Escribe el contenido del Post aquí..."></textarea>
+                        </div>
+                        <div class="h-1rem">
+                            <small *ngIf="inputInvalid('body')" class="text-center p-error block">
+                                {{ bodyErrorMsg }}
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Boton submit -->
+                    <div class="flex justify-content-center">
+                        <button 
+                            pButton 
+                            type="button" 
+                            label="Editar Post"
+                            class="ml-5"
+                            (click)="editPost()">
+                        </button>                     
+                    </div>
+
+                </form>
+            </section>
+        </p-panel>
+    </div>
+    <app-comments 
+        [commentsForAdmin]="commentsForAdmin"
+        [commentsForUser]="commentsForUser" 
+        [showCommentForm]="showCommentForm"
+        [postId]="postId">
     </app-comments>
 
 </div>

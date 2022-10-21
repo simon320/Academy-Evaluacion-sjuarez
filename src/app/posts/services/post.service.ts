@@ -1,10 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
+import { collectionData, Firestore, collection, doc, updateDoc, addDoc, deleteDoc, docSnapshots } from '@angular/fire/firestore';
 
 import { Post } from '../interfaces/post.interface';
-import { Comments } from '../interfaces/comments.interface';
-import { environment } from '../../../environments/environment';
+
 
 
 @Injectable({
@@ -12,32 +11,32 @@ import { environment } from '../../../environments/environment';
 })
 export class PostService {
 
-  private herokuPost: string = environment.herokuPost;
+  constructor( 
+    private firestore: Firestore
+  ) { }
 
-  constructor( private http: HttpClient ) { }
+  addPost( post: Post): Observable<any> {
+    const postRef = collection(this.firestore, "posts");
+    return from(addDoc( postRef, post ));
+  }
 
-  getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>( `${ this.herokuPost }/posts/` );
+  getAllPosts(): Observable<Post[]> {
+    const postRef = collection(this.firestore, 'posts');
+    return collectionData( postRef, { idField: 'id' }) as Observable<Post[]>;
   }
 
   getPostById( id: string ): Observable<Post> {
-    return this.http.get<Post>(`${ this.herokuPost }/posts/${ id }`);
+    const postRef = doc(this.firestore, 'posts', id);
+    return docSnapshots( postRef ) as unknown as Observable<Post>;
   }
 
-  getCommets( id: string ): Observable<Comments[]> {
-    return this.http.get<Comments[]>( `${ this.herokuPost }/comments?postId=${ id }` );
+  editPost( uid: string, post: any): Observable<any> {
+    const postRef = doc(this.firestore, 'posts', uid );
+    return from(updateDoc( postRef, post))
   }
 
-  addCommets( comment: Comments ): Observable<Comments> {
-    return this.http.post<Comments>( `${ this.herokuPost }/comments?postId=${ comment.postId }`, comment );
+  deletePost( uid: string ): Observable<any> {
+    const postRef = doc(this.firestore, 'posts', uid );
+    return from(deleteDoc( postRef ))
   }
-
-  editCommets( comment: Comments ): Observable<Comments> {
-    return this.http.put<Comments>( `${ this.herokuPost }/comments/${ comment.id }`, comment );
-  }
-
-  deleteCommets( id: number ): Observable<Comments>{
-    return this.http.delete<Comments>( `${ this.herokuPost }/comments/${ id }`);
-  }
-
 }

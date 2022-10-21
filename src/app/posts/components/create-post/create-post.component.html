@@ -1,0 +1,57 @@
+<div class="flex justify-content-end mb-3">
+    <button pButton type="button" (click)="close()" class="p-button-outlined mr-3 mt-2"
+    icon="pi pi-times"></button>
+</div>
+
+<div class="mb-5">
+
+    <p-panel header="Nuevo Post">
+        <section class="scalein fadein">
+            <form (ngSubmit)="savePost()" [formGroup]="postForm">
+
+                <!-- Titulo del comentario -->
+                <div class="col-12 md:col-6 m-auto field">
+                    <div class="p-inputgroup flex relative">
+                        <input
+                            pInputText 
+                            type="text" 
+                            placeholder="Titulo del Post"
+                            formControlName="title"> 
+                    </div>
+                    <div class="h-1rem">
+                        <small *ngIf="inputInvalid('title')" class="text-center p-error block">
+                            {{ titleErrorMsg }}
+                        </small>        
+                    </div>    
+                </div>
+
+                <!-- Cuerpo del comentario -->
+                <div class="col-12 md:col-6 m-auto field">
+                    <div class="p-inputgroup flex relative">
+                        <textarea formControlName="body" [rows]="5" [cols]="30" pInputTextarea [autoResize]="true"
+                            placeholder="Escribe el contenido del Post aquí..."></textarea>
+                    </div>
+                    <div class="h-1rem">
+                        <small *ngIf="inputInvalid('body')" class="text-center p-error block">
+                            {{ bodyErrorMsg }}
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Boton submit -->
+                <div class="flex justify-content-center">
+                    <button 
+                        *ngIf="!showBtnEdit"
+                        pButton 
+                        type="submit" 
+                        label="Crear Post"
+                        class="ml-5">
+                    </button>  
+
+                </div>
+
+            </form>
+        </section>
+    </p-panel>
+
+</div>
